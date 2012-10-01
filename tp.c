@@ -524,7 +524,7 @@ char *yytext;
 	#include <stdio.h>
 	#include <string.h>
 	#include <stdlib.h>
-	#include <LinkedList.h>
+	#include "LinkedList.h"
 	
 	#define LEFT 0
 	#define RIGHT 1

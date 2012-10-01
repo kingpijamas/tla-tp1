@@ -2,15 +2,14 @@
 	#include <stdio.h>
 	#include <string.h>
 	#include <stdlib.h>
-	#include <LinkedList.h>
+	#include "LinkedList.h"
 	
 	#define LEFT 0
 	#define RIGHT 1
 	#define NONE 2	
 
 	char* concat(char* s, char* t);
-	
-	
+		
 	char dir=NONE;
 	char * gramName;
 	char dist;
