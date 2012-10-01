@@ -8,10 +8,18 @@
 	#define RIGHT 1
 	#define NONE 2	
 
-	#define INVALID_FORMAT 0
-	
+	#define FALSE 0
+	#define TRUE 1
 
-	void analyze(void);
+	#define OK 0
+	#define INVALID_DIST 1
+	#define INVALID_FROM 2
+	#define INVALID_NONTERMINAL 3
+	#define INVALID_TERMINAL 4
+	#define DIST_NOT_USED 5
+
+	int analyze(void);
+	char containsChar(char * string, char c);
 	char* concat(char* s, char* t);
 	void errorFound(int errNo);
 		
@@ -70,7 +78,7 @@ blank	[ \t\n]
 <PRODT>{upper}{blank}*\}{blank}*\) {p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
 <PRODT>({lower}|{lambda}){blank}*\}{blank}*\) {p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
 
-<END>. {analyze();}
+<END>. {printf("RESULTADO NUMERO: %d\n", analyze());}
 
 . {printf("Error! Not a valid Grammar"); return 1;}
 
@@ -79,11 +87,66 @@ blank	[ \t\n]
 void errorFound(int errNo){
 	//TODO SUPER SWITCH
 	//TODO FREE?
-	return 1;
+	return ;
 }
 
-void analyze(){
-	return;
+int analyze(){
+	
+	//Validacion que los "from" esten contenidos en NoTerm y el dist esta en algun from
+	
+	char useDist = FALSE;
+	Element e;
+	int i; 
+
+	if(!containsChar(nonTerminals,dist)){
+		/*distinguido no es noTerm*/
+		return INVALID_DIST;
+	}	
+	
+	FOR_EACH(e,productions){
+		
+		if(e->prod->from == dist){
+			useDist = TRUE;
+		}	
+
+		if(!containsChar(nonTerminals,e->prod->from)){
+			// From no esta en non terminals
+			return INVALID_FROM;			
+		}
+		if(e->prod->nonTerminal != 0){
+			if(!containsChar(nonTerminals,e->prod->nonTerminal)){
+				//non terminal no esta en non terminal
+				return INVALID_NONTERMINAL;
+			}
+		}	
+		if(e->prod->terminal != 0){
+
+			if(e->prod->terminal == '\\'){;}
+			else if(!containsChar(terminals,e->prod->terminal)){
+				//terminal no esta en terminal
+				return INVALID_TERMINAL;
+			}
+		}	
+
+	}
+	
+	if(useDist == FALSE){
+	
+		return DIST_NOT_USED;
+	}
+
+	return OK;
+}
+
+char containsChar(char * string, char c){
+	
+	int i;
+	for(i = 0; string[i] !=0; i++){
+		if(string[i] == c)
+			return TRUE;
+	}
+	return FALSE;
+
 }
 
 int indexOfLast(char *s){

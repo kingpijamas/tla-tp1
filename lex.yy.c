@@ -545,14 +545,25 @@ char *yytext;
 	#include <string.h>
 	#include <stdlib.h>
 	#include "LinkedList.h"
-	
+
 	#define LEFT 0
 	#define RIGHT 1
 	#define NONE 2	
 
-	void analyze(void);
+	#define FALSE 0
+	#define TRUE 1
 
+	#define OK 0
+	#define INVALID_DIST 1
+	#define INVALID_FROM 2
+	#define INVALID_NONTERMINAL 3
+	#define INVALID_TERMINAL 4
+	#define DIST_NOT_USED 5
+
+	int analyze(void);
+	char containsChar(char * string, char c);
 	char* concat(char* s, char* t);
+	void errorFound(int errNo);
 		
 	char dir=NONE;
 	char * gramName;
@@ -570,7 +581,7 @@ char *yytext;
 
 
 
-#line 574 "lex.yy.c"
+#line 585 "lex.yy.c"
 
 #define INITIAL 0
 #define GRAMNAME 1
@@ -766,9 +777,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 44 "tp.l"
+#line 55 "tp.l"
 
-#line 772 "lex.yy.c"
+#line 783 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -854,144 +865,144 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 45 "tp.l"
+#line 56 "tp.l"
 ;
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 46 "tp.l"
+#line 57 "tp.l"
 {gramName=strdup(yytext);printf("\nyytext: %s gramName:%s\n",yytext,gramName); BEGIN START;}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 47 "tp.l"
+#line 58 "tp.l"
 {printf("START\n"); BEGIN NONTERMINALS;}
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 48 "tp.l"
+#line 59 "tp.l"
 {yytext[1]=0; nonTerminals=concat(nonTerminals,yytext);printf("nonTerminals %s\n",nonTerminals);}
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 49 "tp.l"
+#line 60 "tp.l"
 {yytext[1]=0; nonTerminals=concat(nonTerminals,yytext); printf("nonTerminals %s\n",nonTerminals);BEGIN TERMINALS;}
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 50 "tp.l"
+#line 61 "tp.l"
 {yytext[1]=0; terminals=concat(terminals,yytext);printf("terminals %s\n",terminals);}
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 51 "tp.l"
+#line 62 "tp.l"
 {yytext[1]=0; terminals=concat(terminals,yytext); printf("terminals %s\n",terminals);BEGIN DIST;}
 	YY_BREAK
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 52 "tp.l"
+#line 63 "tp.l"
 {dist = yytext[0];printf("Dist: %c\n",dist); productions=malloc(sizeof(llist)); initList(productions); BEGIN PRODF;}
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 53 "tp.l"
+#line 64 "tp.l"
 {p=AddToList(productions)->prod;p->from=yytext[0]; BEGIN PRODT;}
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 55 "tp.l"
+#line 66 "tp.l"
 {if(dir==LEFT){printf("Error");return 1;};dir=RIGHT;p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 	YY_BREAK
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 56 "tp.l"
+#line 67 "tp.l"
 {if(dir==RIGHT){printf("Error");return 1;};dir=LEFT;p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 	YY_BREAK
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 57 "tp.l"
+#line 68 "tp.l"
 {p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 	YY_BREAK
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 58 "tp.l"
+#line 69 "tp.l"
 {p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 	YY_BREAK
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 60 "tp.l"
+#line 71 "tp.l"
 {if(dir==LEFT){printf("Error"); return 1;};dir=RIGHT;p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=AddToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
 	YY_BREAK
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 61 "tp.l"
+#line 72 "tp.l"
 {if(dir==RIGHT){printf("Error"); return 1;};dir=LEFT;p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=AddToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
 	YY_BREAK
 case 16:
 /* rule 16 can match eol */
 YY_RULE_SETUP
-#line 62 "tp.l"
+#line 73 "tp.l"
 {p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=AddToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
 	YY_BREAK
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
-#line 63 "tp.l"
+#line 74 "tp.l"
 {p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=AddToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 65 "tp.l"
+#line 76 "tp.l"
 {if(dir==LEFT){printf("Error");return 1;};dir=RIGHT;p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
 	YY_BREAK
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 66 "tp.l"
+#line 77 "tp.l"
 {if(dir==RIGHT){printf("Error");return 1;};dir=LEFT;p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 67 "tp.l"
+#line 78 "tp.l"
 {p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 68 "tp.l"
+#line 79 "tp.l"
 {p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 70 "tp.l"
-{analyze();}
+#line 81 "tp.l"
+{printf("RESULTADO NUMERO: %d\n", analyze());}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 72 "tp.l"
+#line 83 "tp.l"
 {printf("Error! Not a valid Grammar"); return 1;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 78 "tp.l"
+#line 85 "tp.l"
 ECHO;
 	YY_BREAK
-#line 995 "lex.yy.c"
+#line 1006 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(GRAMNAME):
 case YY_STATE_EOF(START):
@@ -1998,12 +2009,73 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 78 "tp.l"
+#line 85 "tp.l"
 
 
 
-void analyze(){
-	return;
+void errorFound(int errNo){
+	//TODO SUPER SWITCH
+	//TODO FREE?
+	return ;
+}
+
+int analyze(){
+	
+	//Validacion que los "from" esten contenidos en NoTerm y el dist esta en algun from
+	
+	char useDist = FALSE;
+	Element e;
+	int i; 
+
+	if(!containsChar(nonTerminals,dist)){
+		/*distinguido no es noTerm*/
+		return INVALID_DIST;
+	}	
+	
+	FOR_EACH(e,productions){
+		
+		if(e->prod->from == dist){
+			useDist = TRUE;
+		}	
+
+		if(!containsChar(nonTerminals,e->prod->from)){
+			// From no esta en non terminals
+			return INVALID_FROM;			
+		}
+		if(e->prod->nonTerminal != 0){
+			if(!containsChar(nonTerminals,e->prod->nonTerminal)){
+				//non terminal no esta en non terminal
+				return INVALID_NONTERMINAL;
+			}
+		}	
+		if(e->prod->terminal != 0){
+
+			if(e->prod->terminal == '\\'){;}
+			else if(!containsChar(terminals,e->prod->terminal)){
+				//terminal no esta en terminal
+				return INVALID_TERMINAL;
+			}
+		}	
+
+	}
+	
+	if(useDist == FALSE){
+	
+		return DIST_NOT_USED;
+	}
+
+	return OK;
+}
+
+char containsChar(char * string, char c){
+	
+	int i;
+	for(i = 0; string[i] !=0; i++){
+		if(string[i] == c)
+			return TRUE;
+	}
+	return FALSE;
+
 }
 
 int indexOfLast(char *s){
