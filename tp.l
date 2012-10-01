@@ -18,11 +18,11 @@
 	#define INVALID_TERMINAL 4
 	#define DIST_NOT_USED 5
 
-	int analyze(void);
+	int validate(void);
 	char containsChar(char * string, char c);
 	char* concat(char* s, char* t);
 	void errorFound(int errNo);
-		
+	
 	char dir=NONE;
 	char * gramName;
 	char dist;
@@ -78,7 +78,7 @@ blank	[ \t\n]
 <PRODT>{upper}{blank}*\}{blank}*\) {p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
 <PRODT>({lower}|{lambda}){blank}*\}{blank}*\) {p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
 
-<END>. {printf("RESULTADO NUMERO: %d\n", analyze());}
+<END>. {printf("RESULTADO NUMERO: %d\n", validate());}
 
 . {printf("Error! Not a valid Grammar"); return 1;}
 
@@ -90,7 +90,7 @@ void errorFound(int errNo){
 	return ;
 }
 
-int analyze(){
+int validate(){
 	
 	//Validacion que los "from" esten contenidos en NoTerm y el dist esta en algun from
 	
