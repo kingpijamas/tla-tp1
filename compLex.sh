@@ -1,7 +1,9 @@
 #!/bin/bash
 
-PARAM=$1
+PARAM=$1;
 
-$(flex "$PARAM.l")
-gcc -o "$PARAM" lex.yy.c -lfl
+LINKS=$(ls | grep -e '\.[h|c]')
+
+$(flex "$PARAM.l $LINKS")
+gcc -o "$PARAM" lex.yy.c -lfl $LINKS
 rm lex.yy.c
