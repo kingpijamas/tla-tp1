@@ -530,16 +530,16 @@ char *yytext;
 	#define RIGHT 1
 	#define NONE 2	
 
+
 	char* concat(char* s, char* t);
-	
-	
+		
 	char dir=NONE;
 	char * gramName;
 	char dist;
 	char * nonTerminals;
 	char * terminals;
 	List productions;
-	Production *p;
+	Production p;
 
 
 
@@ -877,19 +877,19 @@ case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
 #line 50 "tp.l"
-{p=AddToList(productions);p->prod->from=yytext[0]; BEGIN PRODT;}
+{p=AddToList(productions)->prod;p->from=yytext[0]; BEGIN PRODT;}
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
 #line 51 "tp.l"
-{if(dir==LEFT){printf("Error");return 1;};dir=RIGHT;p=AddToList(productions);p->prod->terminal=yytext[0];p->prod->nonTerminal=yytext[indexOfLast(yytext)];}
+{if(dir==LEFT){printf("Error");return 1;};dir=RIGHT;p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)];}
 	YY_BREAK
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
 #line 52 "tp.l"
-{if(dir==RIGHT){printf("Error");return 1;};dir=LEFT;p=AddToList(productions);p->prod->terminal=yytext[indexOfLast(yytext)];p->prod->nonTerminal=yytext[0];}
+{if(dir==RIGHT){printf("Error");return 1;};dir=LEFT;p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
@@ -1933,6 +1933,100 @@ char *strdup(const char *s){
 	if(d == 0) return 0;
 	strcpy(d,s);
 	return d;
+}
+
+void initList(List list){
+    list->NumEl = 0;
+    list->pFirst = NULL;
+    list->pLast = NULL;
+}
+
+Element AddToList(List list){
+    //check inputs
+  //  assert(item!=NULL); assert(list!=NULL);
+    if(item == NULL || list == NULL){
+		printf("<LOG - LinkedList.c>\n\tNull pointer.\n<end>\n");
+		exit(EXIT_FAILURE);
+	}
+
+	//Create generic element to hold item ptr
+    Element NewEl = (Element)malloc(sizeof(lelement));  //create generic element
+	
+	if(NewEl == NULL){
+		return NULL;
+	}
+
+    list->NumEl = list->NumEl + 1;
+    NewEl->prod = malloc(sizeof(production));
+    if (list->NumEl == 1){
+      list->pFirst = NewEl;
+      NewEl->prev = NULL;
+      NewEl->next = NULL;
+    }else{
+      NewEl->prev = list->pLast;
+      NewEl->next = NULL;
+      list->pLast->next = NewEl;
+    }
+    list->pLast = NewEl;
+    return NewEl;
+}
+
+void AddElemToList(Element NewEl, List list){
+	list->NumEl = list->NumEl + 1;
+    if (list->NumEl == 1){
+      list->pFirst = NewEl;
+      NewEl->prev = NULL;
+      NewEl->next = NULL;
+    }else{
+      NewEl->prev = list->pLast;
+      NewEl->next = NULL;
+      list->pLast->next = NewEl;
+    }
+    list->pLast = NewEl;
+    return;
+}
+
+
+void Remove(Element elem, List list){
+	Element item;
+	int flag;
+
+	FOR_EACH(item, list){
+		if(item == elem){
+			flag = 1;
+			break;
+		}
+	}
+	
+	if(flag == 0){
+		return;
+	}
+		
+	/* Soy el primero */
+	if(list->pFirst == elem){
+		list->pFirst = elem->next;
+		if(elem->next != NULL){
+			elem->next->prev = NULL;
+		}
+	}
+	/* Soy el ultimo */
+	if(list->pLast == elem){
+		list->pLast = elem->prev;
+		if(elem->prev != NULL){
+			elem->prev->next = NULL;
+		}
+	}
+	if(elem->prev != NULL && elem->next != NULL){
+		elem->prev->next = elem->next;
+		elem->next->prev = elem->prev;
+	}
+	
+	elem->prev = NULL;
+	elem->next = NULL;
+	
+	(list->NumEl)--;
+	
+	return;
 }
 
 int main(void){

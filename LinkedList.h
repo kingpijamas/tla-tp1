@@ -5,17 +5,16 @@ typedef struct production{
 		char from;
 		char nonTerminal;
 		char terminal;
-	}production;
+}production;
 
-typedef * production Production;
+typedef production * Production;
 
 //Generic list lelement
-
 typedef struct lelement{
     struct lelement *  next;
     struct lelement *  prev;
     Production prod;
-	} lelement;
+} lelement;
 
 typedef lelement * Element;
 
@@ -32,7 +31,7 @@ typedef llist * List;
      for (item_ptr = myList->pFirst; item_ptr != NULL; item_ptr=item_ptr->next)
 
 void initList(List list);
-Element AddToList(Production item, List list);
+Element AddToList(List list);
 void AddElemToList(Element NewEl, List list);
 void Remove(Element elem, List list);
 

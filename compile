@@ -1,0 +1,6 @@
+#!/bin/bash
+
+rm sth.out
+flex tp.l && gcc -o sth.out lex.yy.c LinkedList.c && ./sth.out
+
+
