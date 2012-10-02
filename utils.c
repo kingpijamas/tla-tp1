@@ -44,7 +44,6 @@ char * concat(char * s, char * t){
 }
 
 char * strdup(const char * s){
-	printf("strdup");
 	char * d = malloc(strlen(s)+1);
 	if(d == NULL){
 		printf("Not enough memory!");
