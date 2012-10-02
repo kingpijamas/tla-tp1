@@ -912,7 +912,7 @@ case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
 #line 64 "tp.l"
-{p=AddToList(productions)->prod;p->from=yytext[0]; BEGIN PRODT;}
+{p=addToList(productions)->prod;p->from=yytext[0]; BEGIN PRODT;}
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
@@ -942,25 +942,25 @@ case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
 #line 71 "tp.l"
-{if(dir==LEFT){printf("Error"); return 1;};dir=RIGHT;p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=AddToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
+{if(dir==LEFT){printf("Error"); return 1;};dir=RIGHT;p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
 	YY_BREAK
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
 #line 72 "tp.l"
-{if(dir==RIGHT){printf("Error"); return 1;};dir=LEFT;p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=AddToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
+{if(dir==RIGHT){printf("Error"); return 1;};dir=LEFT;p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
 	YY_BREAK
 case 16:
 /* rule 16 can match eol */
 YY_RULE_SETUP
 #line 73 "tp.l"
-{p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=AddToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
+{p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
 	YY_BREAK
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
 #line 74 "tp.l"
-{p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=AddToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
+{p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */

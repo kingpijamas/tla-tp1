@@ -31,8 +31,8 @@ typedef llist * List;
      for (item_ptr = myList->pFirst; item_ptr != NULL; item_ptr=item_ptr->next)
 
 void initList(List list);
-Element AddToList(List list);
-void AddElemToList(Element NewEl, List list);
-void Remove(Element elem, List list);
+Element addToList(List list);
+void addElemToList(Element NewEl, List list);
+void removeElemFromList(Element elem, List list);
 
 #endif

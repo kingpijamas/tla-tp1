@@ -61,17 +61,17 @@ blank	[ \t\n]
 <TERMINALS>{lower}{blank}*, {yytext[1]=0; terminals=concat(terminals,yytext);printf("terminals %s\n",terminals);}
 <TERMINALS>{lower}{blank}*\}{blank}*, {yytext[1]=0; terminals=concat(terminals,yytext); printf("terminals %s\n",terminals);BEGIN DIST;}
 <DIST>{upper}{blank}*,{blank}*\{ {dist = yytext[0];printf("Dist: %c\n",dist); productions=malloc(sizeof(llist)); initList(productions); BEGIN PRODF;}
-<PRODF>{upper}{blank}*\-> {p=AddToList(productions)->prod;p->from=yytext[0]; BEGIN PRODT;}
+<PRODF>{upper}{blank}*\-> {p=addToList(productions)->prod;p->from=yytext[0]; BEGIN PRODT;}
 
 <PRODT>{lower}{blank}*{upper}{blank}*, {if(dir==LEFT){printf("Error");return 1;};dir=RIGHT;p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 <PRODT>{upper}{blank}*{lower}{blank}*, {if(dir==RIGHT){printf("Error");return 1;};dir=LEFT;p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 <PRODT>{upper}{blank}*, {p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 <PRODT>({lower}|{lambda}){blank}*, {p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 
-<PRODT>{lower}{blank}*{upper}{blank}*\| {if(dir==LEFT){printf("Error"); return 1;};dir=RIGHT;p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=AddToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
-<PRODT>{upper}{blank}*{lower}{blank}*\| {if(dir==RIGHT){printf("Error"); return 1;};dir=LEFT;p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=AddToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
-<PRODT>{upper}{blank}*\| {p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=AddToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
-<PRODT>({lower}|{lambda}){blank}*\| {p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=AddToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
+<PRODT>{lower}{blank}*{upper}{blank}*\| {if(dir==LEFT){printf("Error"); return 1;};dir=RIGHT;p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
+<PRODT>{upper}{blank}*{lower}{blank}*\| {if(dir==RIGHT){printf("Error"); return 1;};dir=LEFT;p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
+<PRODT>{upper}{blank}*\| {p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
+<PRODT>({lower}|{lambda}){blank}*\| {p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(productions)->prod;p->from=productions->pLast->prev->prod->from; BEGIN PRODT;}
 
 <PRODT>{lower}{blank}*{upper}{blank}*\}{blank}*\) {if(dir==LEFT){printf("Error");return 1;};dir=RIGHT;p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
 <PRODT>{upper}{blank}*{lower}{blank}*\}{blank}*\) {if(dir==RIGHT){printf("Error");return 1;};dir=LEFT;p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
