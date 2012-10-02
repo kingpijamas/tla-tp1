@@ -1,4 +1,4 @@
-#ifndef LinkedList_h
+#if !defined( LinkedList_h )
 #define LinkedList_h
 
 #include <stdio.h>

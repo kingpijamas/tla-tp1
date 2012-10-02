@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "LinkedList.h"
 
 void initList(List list){
@@ -84,4 +81,13 @@ void removeElemFromList(Element elem, List list){
 	elem->next = NULL;
 	(list->NumEl)--;
 	return;
+}
+
+int size(List list){
+	int i=0;
+	Element e;
+	FOR_EACH(e,list){
+		i++;	
+	}
+	return i;
 }
