@@ -1,0 +1,4 @@
+#!/bin/bash
+
+rm -f sth.out
+flex tp.l && gcc -o sth.out lex.yy.c utils.c LinkedList.c postProcessing.c Grammar.c && ./sth.out
