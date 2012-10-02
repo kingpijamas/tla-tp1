@@ -843,7 +843,7 @@ case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
 #line 30 "tp.l"
-{printf("aca llego");g->name=strdup(yytext);printf("\nyytext: %s gramName:%s\n",yytext,g->name); BEGIN START;}
+{g->name=strdup(yytext);printf("\nyytext: %s gramName:%s\n",yytext,g->name); BEGIN START;}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
@@ -2027,7 +2027,7 @@ ErrorCodes validate(Grammar g){
 }
 
 int main(void){
-	printf("empiezo");
+	g=newGrammar();
 	yylex();
 	return 0;
 }
