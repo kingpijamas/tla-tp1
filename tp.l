@@ -101,7 +101,11 @@ ErrorCodes validate(Grammar g){
 }
 
 int main(void){
+<<<<<<< HEAD
 	g = newGrammar();
+=======
+	g=newGrammar();
+>>>>>>> b496f37056b76f77c9ddecb95c77b7357550dd27
 	yylex();
 	return 0;
 }

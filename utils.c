@@ -26,7 +26,6 @@ int indexOfLast(char * s){
 }
 
 char * concat(char * s, char * t){
-	printf("concat");
 	if(s==NULL){
 		s=strdup(t);
 	}else{
