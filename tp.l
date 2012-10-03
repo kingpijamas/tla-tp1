@@ -35,17 +35,17 @@ blank	[ \t\n]
 <TERMINALS>{lower}{blank}*, {yytext[1]=0; addTerminal(g,yytext); printf("terminals %s\n",g->terminals);}
 <TERMINALS>{lower}{blank}*\}{blank}*, {yytext[1]=0; addTerminal(g,yytext); printf("terminals %s\n",g->terminals);BEGIN DIST;}
 <DIST>{upper}{blank}*,{blank}*\{ {g->dist = yytext[0];printf("Dist: %c\n",g->dist); BEGIN PRODF;}
-<PRODF>{upper}{blank}*\-> {p=addToList(g->productions)->prod;p->from=yytext[0]; BEGIN PRODT;}
+<PRODF>{upper}{blank}*\-> {p=newProduction(g);p->from=yytext[0]; BEGIN PRODT;}
 
 <PRODT>{lower}{blank}*{upper}{blank}*, {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 <PRODT>{upper}{blank}*{lower}{blank}*, {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 <PRODT>{upper}{blank}*, {p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 <PRODT>({lower}|{lambda}){blank}*, {p->terminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 
-<PRODT>{lower}{blank}*{upper}{blank}*\| {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
-<PRODT>{upper}{blank}*{lower}{blank}*\| {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
-<PRODT>{upper}{blank}*\| {p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
-<PRODT>({lower}|{lambda}){blank}*\| {p->terminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
+<PRODT>{lower}{blank}*{upper}{blank}*\| {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);p=newProduction(g);p->from=getLastProduction(g)->from; BEGIN PRODT;}
+<PRODT>{upper}{blank}*{lower}{blank}*\| {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);p=newProduction(g);p->from=getLastProduction(g)->from; BEGIN PRODT;}
+<PRODT>{upper}{blank}*\| {p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);p=newProduction(g);p->from=getLastProduction(g)->from; BEGIN PRODT;}
+<PRODT>({lower}|{lambda}){blank}*\| {p->terminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);p=newProduction(g);p->from=getLastProduction(g)->from; BEGIN PRODT;}
 
 <PRODT>{lower}{blank}*{upper}{blank}*\}{blank}*\) {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}
 <PRODT>{upper}{blank}*{lower}{blank}*\}{blank}*\) {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}

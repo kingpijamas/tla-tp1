@@ -4,26 +4,28 @@ ErrorCodes validate(Grammar g){
 	//Validacion que los "from" esten contenidos en NoTerm y el dist esta en algun from	
 	char useDist = false;
 	Element e;
+	Production p;
 	if(!containsChar(g->nonTerminals,g->dist)){
 		/*distinguido no es noTerm*/
 		return INVALID_DIST;
 	}	
 	FOR_EACH(e,g->productions){
-		if(e->prod->from == g->dist){
+		p=(Production)e->data;
+		if(p->from == g->dist){
 			useDist = true;
 		}	
-		if(!containsChar(g->nonTerminals,e->prod->from)){
+		if(!containsChar(g->nonTerminals,p->from)){
 			// From no esta en non terminals
 			return INVALID_FROM;			
 		}
-		if(e->prod->nonTerminal != 0){
-			if(!containsChar(g->nonTerminals,e->prod->nonTerminal)){
+		if(p->nonTerminal != 0){
+			if(!containsChar(g->nonTerminals,p->nonTerminal)){
 				//non terminal no esta en non terminal
 				return INVALID_NONTERMINAL;
 			}
 		}	
-		if(e->prod->terminal != 0){
-			if(e->prod->terminal != '\\' && !containsChar(g->terminals,e->prod->terminal)){
+		if(p->terminal != 0){
+			if(p->terminal != '\\' && !containsChar(g->terminals,p->terminal)){
 				//terminal no esta en terminal
 				return INVALID_TERMINAL;
 			}
@@ -38,7 +40,7 @@ ErrorCodes validate(Grammar g){
 void removeUnreachableProductions(Grammar g){
 	printf("HOLA\n");
 	int i,j;
-	int n=size(g->productions);//should be == size(nonTerminals) at this point;
+	int n=g->productions->NumEl;//should be == size(nonTerminals) at this point;
 	RelationMatrix t=generateRelationMatrix(g,n);
 	findReachableProductions(t,n);
 	for(i=0;i<n;i++){
@@ -67,8 +69,8 @@ RelationMatrix generateRelationMatrix(Grammar g, int n){//n is the size of produ
 	}
 	
 	FOR_EACH(e,g->productions){
-		row=indexOf(g->nonTerminals, e->prod->from);
-		col=indexOf(g->nonTerminals, e->prod->nonTerminal);		
+		row=indexOf(g->nonTerminals, ((Production)e->data)->from);
+		col=indexOf(g->nonTerminals, ((Production)e->data)->nonTerminal);		
 		relM[row][col].reachable=true;
 		relM[row][col].elem=e;	
 	}
