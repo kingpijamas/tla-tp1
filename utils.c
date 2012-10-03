@@ -11,7 +11,8 @@ int indexOf(char * s, char c){
 			return i;
 		}
 	}
-	return -1;
+	printf("No such element exception: %c in %s\n", c, s);
+	exit(1);
 }
 
 int indexOfLast(char * s){

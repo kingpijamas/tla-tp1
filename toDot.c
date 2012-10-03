@@ -6,11 +6,13 @@ void printAutomaton(Grammar g){
 	dot = strdup("digraph {\nrankdir = \"LR\";\t //De izquierda a derecha\n\n//Nodos\n");
 	int i = 0;
 	Element e;
+	Production p;
 	while(g->nonTerminals[i] != '\0'){
 		boolean flag = false;
 		FOR_EACH(e, g->productions){
+			p=(Production)e->data;
 			cleanBuffer(buffer);
-			if(e->prod->from == g->nonTerminals[i] && e->prod->nonTerminal == '\0' && e->prod->terminal == '\\'){
+			if(p->from == g->nonTerminals[i] && p->nonTerminal == '\0' && p->terminal == '\\'){
 				flag = true;
 			}
 		}
@@ -25,9 +27,10 @@ void printAutomaton(Grammar g){
 	}
 	dot = concat(dot, "\n\n//Transiciones\n");
 	FOR_EACH(e, g->productions){
+		p=(Production)e->data;
 		cleanBuffer(buffer);
-		if(e->prod->terminal != '\\'){
-			sprintf(buffer, "Node%c -> Node%c [label=\"%c\"];\n", e->prod->from, e->prod->nonTerminal, e->prod->terminal);
+		if(p->terminal != '\\'){
+			sprintf(buffer, "Node%c -> Node%c [label=\"%c\"];\n", p->from, p->nonTerminal, p->terminal);
 		}
 		dot = concat(dot, buffer);
 	}

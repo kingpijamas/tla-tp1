@@ -1,8 +1,13 @@
 %{
 	#include "tp.h"
 
+//	Automaton a;
+
 	Grammar g;
 	Production p;
+	Production aux;
+//<DOTSTATESTART>. {printf("%s",yytext);}
+
 %}
 
 digit	[0-9]
@@ -22,82 +27,80 @@ blank	[ \t\n]
 %s PRODF
 %s PRODT
 %s FROMPIPE
+%s END
+
+%s EXPECTINGNODESSTART
+%s EXPECTINGNODES
+%s DOTSTATETYPE
+%s DOTSTATENO
+%s DOTSTATELABEL
+%s DOTSTATELABELNO
+%s DOTSTATEEND
+%s EXPECTINGTRANSITIONS
+%s TRANSITIONTO
+%s TRANSITIONBY
 
 %%
 {blank}+ ;
+
+<INITIAL>digraph{blank}*\{{blank}*rankdir{blank}*={blank}*"LR"{blank}*; {printf("Parsing DOT\n");BEGIN 
+EXPECTINGNODESSTART;}
+<EXPECTINGNODESSTART>\/\/{blank}+Nodos{blank}+ {printf("Parsing Nodes\n");BEGIN EXPECTINGNODES;}
+<EXPECTINGNODES>node{blank}*\[{blank}*shape{blank}*={blank}* {printf("Parsing states\n");BEGIN DOTSTATETYPE;}
+<DOTSTATETYPE>circle {printf("Parsing non terminal state\n"); BEGIN DOTSTATENO;}
+<DOTSTATETYPE>doublecircle {printf("Parsing terminal state\n"); BEGIN DOTSTATENO;}
+<DOTSTATENO>{blank}*\]{blank}*Node{digit}+ {printf("Parsing number %s\n",yytext); BEGIN DOTSTATELABEL;}
+<DOTSTATELABEL>{blank}*\[{blank}*label{blank}*={blank}* {BEGIN DOTSTATELABELNO;}
+<DOTSTATELABELNO>{digit}+ {printf("Parsing label %s\n",yytext); BEGIN DOTSTATEEND;}
+<DOTSTATEEND>{blank}*\]{blank}*; {printf("Done parsing state\n"); BEGIN EXPECTINGNODES;}
+
+<EXPECTINGNODES>\/\/{blank}*Transiciones{blank}+ {printf("Parsing transitions\n"); BEGIN EXPECTINGTRANSITIONS;}
+<EXPECTINGTRANSITIONS>Node{blank}*{digit}+{blank}*-\> {printf("Parsing transition from %s\n", yytext);BEGIN TRANSITIONTO;}
+<TRANSITIONTO>Node{blank}*{digit} {printf("Parsing transition to %s\n",yytext); BEGIN TRANSITIONBY;}
+<TRANSITIONBY>\[{blank}*label{blank}*={letter}{blank}*\]{blank}*; {printf("Done parsing transition\n"); BEGIN EXPECTINGTRANSITIONS;}
+
+<EXPECTINGTRANSITIONS>\} {printf("Done parsing automaton\n");}
+
+\/\/.* ;
+
 <INITIAL>{letter}([^ \n\t])* {g->name=strdup(yytext);printf("\nyytext: %s gramName:%s\n",yytext,g->name); BEGIN START;}
-<START>\={blank}*\({blank}*\{ {printf("START\n"); BEGIN NONTERMINALS;}
+<START>={blank}*\({blank}*\{ {printf("START\n"); BEGIN NONTERMINALS;}
 <NONTERMINALS>{upper}{blank}*, {yytext[1]=0; addNonTerminal(g,yytext);printf("nonTerminals %s\n",g->nonTerminals);}
 <NONTERMINALS>{upper}{blank}*\}{blank}*,{blank}*\{ {yytext[1]=0; addNonTerminal(g,yytext); printf("nonTerminals %s\n",g->nonTerminals);BEGIN TERMINALS;}
 
 <TERMINALS>{lower}{blank}*, {yytext[1]=0; addTerminal(g,yytext); printf("terminals %s\n",g->terminals);}
 <TERMINALS>{lower}{blank}*\}{blank}*, {yytext[1]=0; addTerminal(g,yytext); printf("terminals %s\n",g->terminals);BEGIN DIST;}
 <DIST>{upper}{blank}*,{blank}*\{ {g->dist = yytext[0];printf("Dist: %c\n",g->dist); BEGIN PRODF;}
-<PRODF>{upper}{blank}*\-> {p=addToList(g->productions)->prod;p->from=yytext[0]; BEGIN PRODT;}
+<PRODF>{upper}{blank}*\-> {p=newProduction(g);p->from=yytext[0]; BEGIN PRODT;}
 
-<PRODT>{lower}{blank}*{upper}{blank}*, {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
-<PRODT>{upper}{blank}*{lower}{blank}*, {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
-<PRODT>{upper}{blank}*, {p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
-<PRODT>({lower}|{lambda}){blank}*, {p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
+<PRODT>{lower}{blank}*{upper}{blank}*, {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
+<PRODT>{upper}{blank}*{lower}{blank}*, {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
+<PRODT>{upper}{blank}*, {p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
+<PRODT>({lower}|{lambda}){blank}*, {p->terminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 
-<PRODT>{lower}{blank}*{upper}{blank}*\| {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
-<PRODT>{upper}{blank}*{lower}{blank}*\| {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
-<PRODT>{upper}{blank}*\| {p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
-<PRODT>({lower}|{lambda}){blank}*\| {p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
+<PRODT>{lower}{blank}*{upper}{blank}*\| {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);aux=p;p=newProduction(g);p->from=aux->from; BEGIN PRODT;}
+<PRODT>{upper}{blank}*{lower}{blank}*\| {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);aux=p;p=newProduction(g);p->from=aux->from; BEGIN PRODT;}
+<PRODT>{upper}{blank}*\| {p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);aux=p;p=newProduction(g);p->from=aux->from; BEGIN PRODT;}
+<PRODT>({lower}|{lambda}){blank}*\| {p->terminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);aux=p;p=newProduction(g);p->from=aux->from; BEGIN PRODT;}
 
-<PRODT>{lower}{blank}*{upper}{blank}*\}{blank}*\) {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); finalize();}
-<PRODT>{upper}{blank}*{lower}{blank}*\}{blank}*\) {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); finalize();}
-<PRODT>{upper}{blank}*\}{blank}*\) {p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); finalize();}
-<PRODT>({lower}|{lambda}){blank}*\}{blank}*\) {p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); finalize();}
+<PRODT>{lower}{blank}*{upper}{blank}*\}{blank}*\) {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}
+<PRODT>{upper}{blank}*{lower}{blank}*\}{blank}*\) {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}
+<PRODT>{upper}{blank}*\}{blank}*\) {p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}
+<PRODT>({lower}|{lambda}){blank}*\}{blank}*\) {p->terminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}
 
-. {printf("Error! Not a valid Grammar"); return 1;}
+. {printf("%s Error! Not a valid Grammar\n", yytext); return 1;}
 
 %%
 
-void finalize(){ 
-	printf("RESULTADO NUMERO: %d\n", validate(g));
-	printAutomaton(g);
+void processErrors(ErrorCodes err){
+	printf("RESULTADO NUMERO: %d\n", err);
 }
 
-void errorFound(ErrorCodes err){
-	//TODO SUPER SWITCH
-	//TODO FREE?
-	return ;
-}
-
-ErrorCodes validate(Grammar g){
-	//Validacion que los "from" esten contenidos en NoTerm y el dist esta en algun from	
-	char useDist = false;
-	Element e;
-	if(!containsChar(g->nonTerminals,g->dist)){
-		/*distinguido no es noTerm*/
-		return INVALID_DIST;
-	}	
-	FOR_EACH(e,g->productions){
-		if(e->prod->from == g->dist){
-			useDist = true;
-		}	
-		if(!containsChar(g->nonTerminals,e->prod->from)){
-			// From no esta en non terminals
-			return INVALID_FROM;			
-		}
-		if(e->prod->nonTerminal != 0){
-			if(!containsChar(g->nonTerminals,e->prod->nonTerminal)){
-				//non terminal no esta en non terminal
-				return INVALID_NONTERMINAL;
-			}
-		}	
-		if(e->prod->terminal != 0){
-			if(e->prod->terminal != '\\' && !containsChar(g->terminals,e->prod->terminal)){
-				//terminal no esta en terminal
-				return INVALID_TERMINAL;
-			}
-		}
-	}
-	if(useDist == false){
-		return DIST_NOT_USED;
-	}
-	return OK;
+void processGrammar(Grammar g){
+	printf("ANTES\n");
+	processErrors(validate(g));
+	printf("DESPUES\n");
+	removeUnreachableProductions(g);
 }
 
 int main(void){

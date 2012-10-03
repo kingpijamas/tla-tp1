@@ -28,3 +28,17 @@ void setDirection(Grammar g, Directions d){
 	};
 	g->dir=d;
 }
+
+Production newProduction(Grammar g){
+	Production p=malloc(sizeof(production));	
+	addProduction(g,p);
+	return p;
+}
+
+void addProduction(Grammar g, Production p){
+	addToList(p,g->productions);
+}
+
+Production getLastProduction(Grammar g){
+	return ((Production)(g->productions->pLast)->data);
+}
