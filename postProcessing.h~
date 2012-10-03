@@ -1,4 +1,4 @@
-#if !defined( postProcessing_h )
+#ifndef postProcessing_h
 #define postProcessing_h
 
 #include "utils.h"

@@ -1991,41 +1991,6 @@ void errorFound(ErrorCodes err){
 	return ;
 }
 
-ErrorCodes validate(Grammar g){
-	//Validacion que los "from" esten contenidos en NoTerm y el dist esta en algun from	
-	char useDist = false;
-	Element e;
-	if(!containsChar(g->nonTerminals,g->dist)){
-		/*distinguido no es noTerm*/
-		return INVALID_DIST;
-	}	
-	FOR_EACH(e,g->productions){
-		if(e->prod->from == g->dist){
-			useDist = true;
-		}	
-		if(!containsChar(g->nonTerminals,e->prod->from)){
-			// From no esta en non terminals
-			return INVALID_FROM;			
-		}
-		if(e->prod->nonTerminal != 0){
-			if(!containsChar(g->nonTerminals,e->prod->nonTerminal)){
-				//non terminal no esta en non terminal
-				return INVALID_NONTERMINAL;
-			}
-		}	
-		if(e->prod->terminal != 0){
-			if(e->prod->terminal != '\\' && !containsChar(g->terminals,e->prod->terminal)){
-				//terminal no esta en terminal
-				return INVALID_TERMINAL;
-			}
-		}
-	}
-	if(useDist == false){
-		return DIST_NOT_USED;
-	}
-	return OK;
-}
-
 int main(void){
 	g=newGrammar();
 	yylex();

@@ -1,2 +1,5 @@
 *.project
 *.settings
+*.yy.c
+*.out
+*.o
