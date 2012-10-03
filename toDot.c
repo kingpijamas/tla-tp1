@@ -34,10 +34,9 @@ void printAutomaton(Grammar g){
 	dot = concat(dot, "\n}");
 
 	//TESTEO
-	printf("%s",dot);
 	FILE *fp;
 	fp=fopen("out.dot", "w");
-	fprintf(fp, dot);
+	fprintf(fp, "%s", dot);
 	fclose(fp);
 	system("dot -Tpng out.dot > out.png");
 
