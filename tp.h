@@ -4,6 +4,7 @@
 #include "utils.h"
 #include "LinkedList.h"
 #include "Grammar.h"
+#include "toDot.h"
 #include "postProcessing.h"
 
 typedef enum {
@@ -12,5 +13,6 @@ typedef enum {
 
 void errorFound(ErrorCodes err);
 ErrorCodes validate(Grammar g);
+void finalize(void);
 
 #endif
