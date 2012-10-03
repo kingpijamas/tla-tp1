@@ -17,7 +17,6 @@ typedef enum {
 	OK=0,INVALID_DIST,INVALID_FROM,INVALID_NONTERMINAL,INVALID_TERMINAL,DIST_NOT_USED
 } ErrorCodes;
 
-Relation newRelation(Element elem);
 RelationMatrix generateRelationMatrix(Grammar g, int n);//n is the size of production
 void findReachableProductions(RelationMatrix t,int n);//uses Warshall's algorithm
 void removeUnreachableProductions(Grammar g);

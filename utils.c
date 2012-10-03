@@ -11,7 +11,8 @@ int indexOf(char * s, char c){
 			return i;
 		}
 	}
-	return -1;
+	printf("Error, asking for index of an unexisting element %c %s\n", c, s);
+	exit(1);
 }
 
 int indexOfLast(char * s){

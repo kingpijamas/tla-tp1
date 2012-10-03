@@ -7,6 +7,6 @@
 #include "postProcessing.h"
 
 void processErrors(ErrorCodes err);
-ErrorCodes processGrammar(Grammar g);
+void processGrammar(Grammar g);
 
 #endif

@@ -60,7 +60,7 @@ void processErrors(ErrorCodes err){
 	printf("RESULTADO NUMERO: %d\n", err);
 }
 
-ErrorCodes processGrammar(Grammar g){
+void processGrammar(Grammar g){
 	printf("ANTES\n");
 	processErrors(validate(g));
 	printf("DESPUES\n");
