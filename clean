@@ -1,0 +1,11 @@
+#!/bin/bash
+
+TOREMOVE=$(ls | grep .~);
+
+for FILE in $TOREMOVE; do
+	rm $FILE;
+done;
+
+rm -f *.o
+rm -f tp.c
+rm -f lex.yy.c

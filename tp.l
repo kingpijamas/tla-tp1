@@ -2,7 +2,6 @@
 	#include "tp.h"
 
 	Grammar g;
-	boolean done;
 	Production p;
 %}
 
@@ -70,7 +69,6 @@ ErrorCodes processGrammar(Grammar g){
 
 int main(void){
 	g=newGrammar();
-	done=false;
 	yylex();
 	return 0;
 }
