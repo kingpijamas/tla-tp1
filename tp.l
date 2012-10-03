@@ -27,7 +27,7 @@ blank	[ \t\n]
 
 %%
 {blank}+ ;
-<INITIAL>{letter}(^{blank})* {g->name=strdup(yytext);printf("\nyytext: %s gramName:%s\n",yytext,g->name); BEGIN START;}
+<INITIAL>{letter}([^ \n\t])* {g->name=strdup(yytext);printf("\nyytext: %s gramName:%s\n",yytext,g->name); BEGIN START;}
 <START>\={blank}*\({blank}*\{ {printf("START\n"); BEGIN NONTERMINALS;}
 <NONTERMINALS>{upper}{blank}*, {yytext[1]=0; addNonTerminal(g,yytext);printf("nonTerminals %s\n",g->nonTerminals);}
 <NONTERMINALS>{upper}{blank}*\}{blank}*,{blank}*\{ {yytext[1]=0; addNonTerminal(g,yytext); printf("nonTerminals %s\n",g->nonTerminals);BEGIN TERMINALS;}

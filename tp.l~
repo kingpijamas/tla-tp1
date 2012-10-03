@@ -64,8 +64,6 @@ void errorFound(ErrorCodes err){
 	return ;
 }
 
-
-
 int main(void){
 	g=newGrammar();
 	yylex();

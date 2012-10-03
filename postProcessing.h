@@ -13,7 +13,6 @@ typedef struct relation{
 typedef relation * Relation;
 typedef Relation * RelationMatrix;
 
-
 Relation newRelation(Element elem);
 RelationMatrix generateRelationMatrix(Grammar g, int n);//n is the size of production
 void findReachableProductions(RelationMatrix t,int n);//uses Warshall's algorithm
