@@ -11,7 +11,7 @@ int indexOf(char * s, char c){
 			return i;
 		}
 	}
-	printf("Error, asking for index of an unexisting element %c %s\n", c, s);
+	printf("No such element exception: %c in %s\n", c, s);
 	exit(1);
 }
 
