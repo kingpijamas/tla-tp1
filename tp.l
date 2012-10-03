@@ -1,8 +1,12 @@
 %{
 	#include "tp.h"
 
+//	Automaton a;
+
 	Grammar g;
 	Production p;
+//<DOTSTATESTART>. {printf("%s",yytext);}
+
 %}
 
 digit	[0-9]
@@ -24,11 +28,42 @@ blank	[ \t\n]
 %s FROMPIPE
 %s END
 
+%s EXPECTINGNODESSTART
+%s EXPECTINGNODES
+%s DOTSTATETYPE
+%s DOTSTATENO
+%s DOTSTATELABEL
+%s DOTSTATELABELNO
+%s DOTSTATEEND
+%s EXPECTINGTRANSITIONS
+%s TRANSITIONTO
+%s TRANSITIONBY
 
 %%
 {blank}+ ;
+
+<INITIAL>digraph{blank}*\{{blank}*rankdir{blank}*={blank}*"LR"{blank}*; {printf("Parsing DOT\n");BEGIN 
+EXPECTINGNODESSTART;}
+<EXPECTINGNODESSTART>\/\/{blank}+Nodos{blank}+ {printf("Parsing Nodes\n");BEGIN EXPECTINGNODES;}
+<EXPECTINGNODES>node{blank}*\[{blank}*shape{blank}*={blank}* {printf("Parsing states\n");BEGIN DOTSTATETYPE;}
+<DOTSTATETYPE>circle {printf("Parsing non terminal state\n"); BEGIN DOTSTATENO;}
+<DOTSTATETYPE>doublecircle {printf("Parsing terminal state\n"); BEGIN DOTSTATENO;}
+<DOTSTATENO>{blank}*\]{blank}*Node{digit}+ {printf("Parsing number %s\n",yytext); BEGIN DOTSTATELABEL;}
+<DOTSTATELABEL>{blank}*\[{blank}*label{blank}*={blank}* {BEGIN DOTSTATELABELNO;}
+<DOTSTATELABELNO>{digit}+ {printf("Parsing label %s\n",yytext); BEGIN DOTSTATEEND;}
+<DOTSTATEEND>{blank}*\]{blank}*; {printf("Done parsing state\n"); BEGIN EXPECTINGNODES;}
+
+<EXPECTINGNODES>\/\/{blank}*Transiciones{blank}+ {printf("Parsing transitions\n"); BEGIN EXPECTINGTRANSITIONS;}
+<EXPECTINGTRANSITIONS>Node{blank}*{digit}+{blank}*-\> {printf("Parsing transition from %s\n", yytext);BEGIN TRANSITIONTO;}
+<TRANSITIONTO>Node{blank}*{digit} {printf("Parsing transition to %s\n",yytext); BEGIN TRANSITIONBY;}
+<TRANSITIONBY>\[{blank}*label{blank}*={letter}{blank}*\]{blank}*; {printf("Done parsing transition\n"); BEGIN EXPECTINGTRANSITIONS;}
+
+<EXPECTINGTRANSITIONS>\} {printf("Done parsing automaton\n");}
+
+\/\/.* ;
+
 <INITIAL>{letter}([^ \n\t])* {g->name=strdup(yytext);printf("\nyytext: %s gramName:%s\n",yytext,g->name); BEGIN START;}
-<START>\={blank}*\({blank}*\{ {printf("START\n"); BEGIN NONTERMINALS;}
+<START>={blank}*\({blank}*\{ {printf("START\n"); BEGIN NONTERMINALS;}
 <NONTERMINALS>{upper}{blank}*, {yytext[1]=0; addNonTerminal(g,yytext);printf("nonTerminals %s\n",g->nonTerminals);}
 <NONTERMINALS>{upper}{blank}*\}{blank}*,{blank}*\{ {yytext[1]=0; addNonTerminal(g,yytext); printf("nonTerminals %s\n",g->nonTerminals);BEGIN TERMINALS;}
 
@@ -52,7 +87,7 @@ blank	[ \t\n]
 <PRODT>{upper}{blank}*\}{blank}*\) {p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}
 <PRODT>({lower}|{lambda}){blank}*\}{blank}*\) {p->terminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}
 
-. {printf("Error! Not a valid Grammar\n"); return 1;}
+. {printf("%s Error! Not a valid Grammar\n", yytext); return 1;}
 
 %%
 
