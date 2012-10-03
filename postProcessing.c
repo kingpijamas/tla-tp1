@@ -47,6 +47,7 @@ Para k:1 .. n
 Fin.
 */
 void removeUnreachableProductions(Grammar g){
+	printf("HOLA");
 	int n=size(g->productions);//should be == size(nonTerminals) at this point;
 	RelationMatrix t=generateRelationMatrix(g,n);
 	findReachableProductions(t,n);

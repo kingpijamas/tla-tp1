@@ -6,7 +6,7 @@
 #include "Grammar.h"
 #include "postProcessing.h"
 
-void errorFound(ErrorCodes err);
-ErrorCodes validate(Grammar g);
+void processErrors(ErrorCodes err);
+ErrorCodes processGrammar(Grammar g);
 
 #endif

@@ -371,8 +371,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 24
-#define YY_END_OF_BUFFER 25
+#define YY_NUM_RULES 23
+#define YY_END_OF_BUFFER 24
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -380,17 +380,17 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[89] =
+static yyconst flex_int16_t yy_accept[87] =
     {   0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-       25,   23,    1,    1,    2,   23,   23,   23,   23,   23,
-       23,   23,   23,   22,    1,    1,    2,    0,    0,    0,
-        0,    0,    4,    0,    0,    6,    0,    0,    0,    0,
-       12,    0,   16,    0,    0,   13,   17,    0,    0,    0,
-        0,    3,    0,    8,    0,    0,    0,    7,    9,    0,
-       11,   15,    0,    0,   20,    0,   21,    0,   10,   14,
-        0,    0,    5,    0,   19,    0,   18,    0
+       24,   22,    1,    1,    2,   22,   22,   22,   22,   22,
+       22,   22,   22,    1,    2,    0,    0,    0,    0,    0,
+        4,    0,    0,    6,    0,    0,    0,    0,   12,    0,
+       16,    0,    0,   13,   17,    0,    0,    0,    0,    3,
+        0,    8,    0,    0,    0,    7,    9,    0,   11,   15,
+        0,    0,   20,    0,   21,    0,   10,   14,    0,    0,
+        5,    0,   19,    0,   18,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -431,94 +431,90 @@ static yyconst flex_int32_t yy_meta[16] =
         1,    1,    7,    1,    1
     } ;
 
-static yyconst flex_int16_t yy_base[104] =
+static yyconst flex_int16_t yy_base[101] =
     {   0,
         0,   11,    2,    4,   22,    0,    1,    7,    8,   12,
-       19,   20,   25,   26,   27,    0,   79,   77,   38,   40,
-       84,  211,   42,   44,    0,   79,   76,   46,   60,   74,
-       74,   88,  102,  211,   48,   51,    0,   75,   65,   68,
-       60,    0,  211,   66,    0,  211,   65,   63,   60,    0,
-      211,  111,  211,   63,    0,  211,  211,   62,    0,  125,
-       52,  211,   51,  211,   54,   46,   52,  211,  211,    0,
-      211,  211,   52,   51,  211,   50,  211,    0,  211,  211,
-       24,   13,  211,   14,  211,    3,  211,  211,  140,  147,
-      154,  160,  162,  166,  171,  177,  183,  187,  191,  194,
+       19,   20,   25,   26,   27,    0,   75,   73,   72,   71,
+       78,  200,   38,   40,    0,   73,   69,   42,   56,   67,
+       70,   84,   98,   44,    0,   66,   56,   62,   54,    0,
+      200,   60,    0,  200,   59,   57,   54,    0,  200,  107,
+      200,   56,    0,  200,  200,   55,    0,  121,   43,  200,
+       42,  200,   48,   40,   46,  200,  200,    0,  200,  200,
+       46,   45,  200,   44,  200,    0,  200,  200,   24,   13,
+      200,   14,  200,    3,  200,  200,  136,  143,  149,  151,
+      155,  160,  166,  172,  176,  180,  183,  186,  192,  195
 
-      197,  203,  206
     } ;
 
-static yyconst flex_int16_t yy_def[104] =
+static yyconst flex_int16_t yy_def[101] =
     {   0,
-       89,   89,   89,   89,   89,    5,    5,    5,    5,    5,
-        5,    5,    5,    5,    2,   15,    5,    5,   90,   90,
-       88,   88,   88,   88,   91,   92,   93,   88,   88,   94,
-       88,   88,   32,   88,   88,   88,   91,   92,   95,   93,
-       96,   28,   88,   97,   29,   88,   98,   94,   88,   31,
-       88,   88,   88,   99,   32,   88,   88,  100,   33,   88,
-       95,   88,   96,   88,   97,  101,   98,   88,   88,   52,
-       88,   88,  102,   99,   88,  100,   88,   60,   88,   88,
-      103,  101,   88,  102,   88,  103,   88,    0,   88,   88,
-       88,   88,   88,   88,   88,   88,   88,   88,   88,   88,
+       87,   87,   87,   87,   87,    5,    5,    5,    5,    5,
+        5,    5,    5,    5,    2,   15,    5,    5,    5,    5,
+       86,   86,   86,   86,   88,   89,   90,   86,   86,   91,
+       86,   86,   32,   86,   88,   89,   92,   90,   93,   28,
+       86,   94,   29,   86,   95,   91,   86,   31,   86,   86,
+       86,   96,   32,   86,   86,   97,   33,   86,   92,   86,
+       93,   86,   94,   98,   95,   86,   86,   50,   86,   86,
+       99,   96,   86,   97,   86,   58,   86,   86,  100,   98,
+       86,   99,   86,  100,   86,    0,   86,   86,   86,   86,
+       86,   86,   86,   86,   86,   86,   86,   86,   86,   86
 
-       88,   88,   88
     } ;
 
-static yyconst flex_int16_t yy_nxt[227] =
+static yyconst flex_int16_t yy_nxt[216] =
     {   0,
-       88,   23,   24,   23,   24,   23,   24,   87,   22,   25,
-       27,   25,   23,   24,   22,   22,   27,   28,   85,   22,
-       25,   28,   25,   23,   24,   83,   22,   22,   87,   26,
-       29,   29,   22,   22,   30,   30,   31,   32,   33,   35,
-       24,   35,   24,   36,   36,   36,   36,   42,   42,   36,
-       36,   43,   36,   36,   77,   75,   85,   68,   83,   66,
-       44,   45,   45,   64,   62,   46,   77,   75,   69,   49,
-       68,   66,   64,   41,   47,   50,   50,   62,   39,   51,
-       49,   41,   39,   88,   22,   52,   22,   53,   54,   55,
-       55,   88,   88,   56,   88,   88,   88,   88,   88,   88,
+       86,   23,   24,   23,   24,   23,   24,   85,   22,   25,
+       27,   25,   23,   24,   22,   22,   27,   28,   83,   22,
+       25,   28,   25,   23,   24,   81,   22,   22,   85,   26,
+       29,   29,   22,   22,   30,   30,   31,   32,   33,   34,
+       34,   34,   34,   40,   40,   34,   34,   41,   75,   73,
+       83,   66,   81,   64,   62,   60,   42,   43,   43,   75,
+       73,   44,   67,   47,   66,   64,   62,   39,   60,   37,
+       45,   48,   48,   47,   39,   49,   37,   86,   22,   22,
+       22,   50,   22,   51,   52,   53,   53,   86,   86,   54,
+       86,   86,   86,   86,   86,   86,   86,   55,   56,   57,
 
-       88,   57,   58,   59,   59,   88,   88,   88,   88,   88,
-       88,   60,   70,   70,   88,   88,   71,   88,   88,   88,
-       88,   88,   88,   88,   72,   73,   78,   78,   88,   88,
-       79,   88,   88,   88,   88,   88,   88,   88,   80,   81,
-       22,   22,   22,   22,   22,   22,   22,   34,   34,   34,
-       34,   34,   34,   34,   37,   88,   37,   37,   37,   37,
-       37,   38,   38,   40,   88,   88,   40,   48,   88,   88,
-       88,   48,   61,   88,   88,   88,   88,   61,   63,   88,
-       88,   88,   88,   63,   65,   88,   88,   65,   67,   88,
-       88,   67,   74,   88,   74,   76,   88,   76,   82,   88,
+       57,   86,   86,   86,   86,   86,   86,   58,   68,   68,
+       86,   86,   69,   86,   86,   86,   86,   86,   86,   86,
+       70,   71,   76,   76,   86,   86,   77,   86,   86,   86,
+       86,   86,   86,   86,   78,   79,   22,   22,   22,   22,
+       22,   22,   22,   35,   86,   35,   35,   35,   35,   35,
+       36,   36,   38,   86,   86,   38,   46,   86,   86,   86,
+       46,   59,   86,   86,   86,   86,   59,   61,   86,   86,
+       86,   86,   61,   63,   86,   86,   63,   65,   86,   86,
+       65,   72,   86,   72,   74,   86,   74,   80,   86,   86,
+       86,   86,   80,   82,   86,   82,   84,   86,   84,   21,
 
-       88,   88,   88,   82,   84,   88,   84,   86,   88,   86,
-       21,   88,   88,   88,   88,   88,   88,   88,   88,   88,
-       88,   88,   88,   88,   88,   88
+       86,   86,   86,   86,   86,   86,   86,   86,   86,   86,
+       86,   86,   86,   86,   86
     } ;
 
-static yyconst flex_int16_t yy_chk[227] =
+static yyconst flex_int16_t yy_chk[216] =
     {   0,
-        0,    1,    1,    3,    3,    4,    4,   86,    7,    1,
-        7,    1,    2,    2,    8,    9,    8,    9,   84,   10,
-        2,   10,    2,    5,    5,   82,   11,   12,   81,    5,
-       11,   12,   13,   14,   13,   14,   15,   15,   15,   19,
-       19,   20,   20,   23,   23,   24,   24,   28,   28,   35,
-       35,   28,   36,   36,   76,   74,   73,   67,   66,   65,
-       28,   29,   29,   63,   61,   29,   58,   54,   49,   48,
-       47,   44,   41,   40,   29,   31,   31,   39,   38,   31,
-       30,   27,   26,   21,   18,   31,   17,   31,   31,   32,
-       32,    0,    0,   32,    0,    0,    0,    0,    0,    0,
+        0,    1,    1,    3,    3,    4,    4,   84,    7,    1,
+        7,    1,    2,    2,    8,    9,    8,    9,   82,   10,
+        2,   10,    2,    5,    5,   80,   11,   12,   79,    5,
+       11,   12,   13,   14,   13,   14,   15,   15,   15,   23,
+       23,   24,   24,   28,   28,   34,   34,   28,   74,   72,
+       71,   65,   64,   63,   61,   59,   28,   29,   29,   56,
+       52,   29,   47,   46,   45,   42,   39,   38,   37,   36,
+       29,   31,   31,   30,   27,   31,   26,   21,   20,   19,
+       18,   31,   17,   31,   31,   32,   32,    0,    0,   32,
+        0,    0,    0,    0,    0,    0,    0,   32,   32,   33,
 
-        0,   32,   32,   33,   33,    0,    0,    0,    0,    0,
-        0,   33,   52,   52,    0,    0,   52,    0,    0,    0,
-        0,    0,    0,    0,   52,   52,   60,   60,    0,    0,
-       60,    0,    0,    0,    0,    0,    0,    0,   60,   60,
-       89,   89,   89,   89,   89,   89,   89,   90,   90,   90,
-       90,   90,   90,   90,   91,    0,   91,   91,   91,   91,
-       91,   92,   92,   93,    0,    0,   93,   94,    0,    0,
-        0,   94,   95,    0,    0,    0,    0,   95,   96,    0,
-        0,    0,    0,   96,   97,    0,    0,   97,   98,    0,
-        0,   98,   99,    0,   99,  100,    0,  100,  101,    0,
+       33,    0,    0,    0,    0,    0,    0,   33,   50,   50,
+        0,    0,   50,    0,    0,    0,    0,    0,    0,    0,
+       50,   50,   58,   58,    0,    0,   58,    0,    0,    0,
+        0,    0,    0,    0,   58,   58,   87,   87,   87,   87,
+       87,   87,   87,   88,    0,   88,   88,   88,   88,   88,
+       89,   89,   90,    0,    0,   90,   91,    0,    0,    0,
+       91,   92,    0,    0,    0,    0,   92,   93,    0,    0,
+        0,    0,   93,   94,    0,    0,   94,   95,    0,    0,
+       95,   96,    0,   96,   97,    0,   97,   98,    0,    0,
+        0,    0,   98,   99,    0,   99,  100,    0,  100,   86,
 
-        0,    0,    0,  101,  102,    0,  102,  103,    0,  103,
-       88,   88,   88,   88,   88,   88,   88,   88,   88,   88,
-       88,   88,   88,   88,   88,   88
+       86,   86,   86,   86,   86,   86,   86,   86,   86,   86,
+       86,   86,   86,   86,   86
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -540,6 +536,7 @@ char *yytext;
 	#include "tp.h"
 
 	Grammar g;
+	boolean done;
 	Production p;
 
 
@@ -550,7 +547,7 @@ char *yytext;
 
 
 
-#line 554 "lex.yy.c"
+#line 551 "lex.yy.c"
 
 #define INITIAL 0
 #define GRAMNAME 1
@@ -746,9 +743,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 28 "tp.l"
+#line 29 "tp.l"
 
-#line 752 "lex.yy.c"
+#line 749 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -801,13 +798,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 89 )
+				if ( yy_current_state >= 87 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 211 );
+		while ( yy_base[yy_current_state] != 200 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -834,144 +831,139 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 29 "tp.l"
+#line 30 "tp.l"
 ;
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 30 "tp.l"
+#line 31 "tp.l"
 {g->name=strdup(yytext);printf("\nyytext: %s gramName:%s\n",yytext,g->name); BEGIN START;}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 31 "tp.l"
+#line 32 "tp.l"
 {printf("START\n"); BEGIN NONTERMINALS;}
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 32 "tp.l"
+#line 33 "tp.l"
 {yytext[1]=0; addNonTerminal(g,yytext);printf("nonTerminals %s\n",g->nonTerminals);}
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 33 "tp.l"
+#line 34 "tp.l"
 {yytext[1]=0; addNonTerminal(g,yytext); printf("nonTerminals %s\n",g->nonTerminals);BEGIN TERMINALS;}
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 35 "tp.l"
+#line 36 "tp.l"
 {yytext[1]=0; addTerminal(g,yytext); printf("terminals %s\n",g->terminals);}
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 36 "tp.l"
+#line 37 "tp.l"
 {yytext[1]=0; addTerminal(g,yytext); printf("terminals %s\n",g->terminals);BEGIN DIST;}
 	YY_BREAK
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 37 "tp.l"
+#line 38 "tp.l"
 {g->dist = yytext[0];printf("Dist: %c\n",g->dist); BEGIN PRODF;}
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 38 "tp.l"
+#line 39 "tp.l"
 {p=addToList(g->productions)->prod;p->from=yytext[0]; BEGIN PRODT;}
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 40 "tp.l"
-{setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
+#line 41 "tp.l"
+{setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 	YY_BREAK
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 41 "tp.l"
-{setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
+#line 42 "tp.l"
+{setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 	YY_BREAK
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 42 "tp.l"
-{p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
+#line 43 "tp.l"
+{p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 	YY_BREAK
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 43 "tp.l"
-{p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
+#line 44 "tp.l"
+{p->terminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN PRODF;}
 	YY_BREAK
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 45 "tp.l"
-{setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
+#line 46 "tp.l"
+{setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
 	YY_BREAK
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 46 "tp.l"
-{setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
+#line 47 "tp.l"
+{setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
 	YY_BREAK
 case 16:
 /* rule 16 can match eol */
 YY_RULE_SETUP
-#line 47 "tp.l"
-{p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
+#line 48 "tp.l"
+{p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
 	YY_BREAK
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
-#line 48 "tp.l"
-{p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
+#line 49 "tp.l"
+{p->terminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 50 "tp.l"
-{setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
+#line 51 "tp.l"
+{setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}
 	YY_BREAK
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 51 "tp.l"
-{setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
+#line 52 "tp.l"
+{setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 52 "tp.l"
-{p->nonTerminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
+#line 53 "tp.l"
+{p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 53 "tp.l"
-{p->terminal=yytext[0];printf("from: %c nonTerminal: %c terminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
+#line 54 "tp.l"
+{p->terminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 55 "tp.l"
-{printf("RESULTADO NUMERO: %d\n", validate(g));}
+#line 56 "tp.l"
+{printf("Error! Not a valid Grammar\n"); return 1;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 57 "tp.l"
-{printf("Error! Not a valid Grammar"); return 1;}
-	YY_BREAK
-case 24:
-YY_RULE_SETUP
-#line 59 "tp.l"
+#line 58 "tp.l"
 ECHO;
 	YY_BREAK
-#line 975 "lex.yy.c"
+#line 967 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(GRAMNAME):
 case YY_STATE_EOF(START):
@@ -1272,7 +1264,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 89 )
+			if ( yy_current_state >= 87 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1300,11 +1292,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 89 )
+		if ( yy_current_state >= 87 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 88);
+	yy_is_jam = (yy_current_state == 86);
 
 	return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1978,18 +1970,24 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 59 "tp.l"
+#line 58 "tp.l"
 
 
 
-void errorFound(ErrorCodes err){
-	//TODO SUPER SWITCH
-	//TODO FREE?
-	return ;
+void processErrors(ErrorCodes err){
+	printf("RESULTADO NUMERO: %d\n", err);
+}
+
+ErrorCodes processGrammar(Grammar g){
+	printf("ANTES\n");
+	processErrors(validate(g));
+	printf("DESPUES\n");
+	removeUnreachableProductions(g);
 }
 
 int main(void){
 	g=newGrammar();
+	done=false;
 	yylex();
 	return 0;
 }

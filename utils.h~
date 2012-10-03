@@ -9,6 +9,7 @@ typedef enum {
 	false=0,true
 } boolean;
 
+
 boolean containsChar(char * s, char c);
 int indexOf(char * s, char c);
 int indexOfLast(char * s);

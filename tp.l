@@ -2,6 +2,7 @@
 	#include "tp.h"
 
 	Grammar g;
+	boolean done;
 	Production p;
 %}
 
@@ -47,25 +48,29 @@ blank	[ \t\n]
 <PRODT>{upper}{blank}*\| {p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
 <PRODT>({lower}|{lambda}){blank}*\| {p->terminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal);p=addToList(g->productions)->prod;p->from=g->productions->pLast->prev->prod->from; BEGIN PRODT;}
 
-<PRODT>{lower}{blank}*{upper}{blank}*\}{blank}*\) {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
-<PRODT>{upper}{blank}*{lower}{blank}*\}{blank}*\) {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
-<PRODT>{upper}{blank}*\}{blank}*\) {p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
-<PRODT>({lower}|{lambda}){blank}*\}{blank}*\) {p->terminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); BEGIN END;}
+<PRODT>{lower}{blank}*{upper}{blank}*\}{blank}*\) {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}
+<PRODT>{upper}{blank}*{lower}{blank}*\}{blank}*\) {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}
+<PRODT>{upper}{blank}*\}{blank}*\) {p->nonTerminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}
+<PRODT>({lower}|{lambda}){blank}*\}{blank}*\) {p->terminal=yytext[0];printf("from: %c terminal: %c nonTerminal: %c\n",p->from,p->terminal,p->nonTerminal); processGrammar(g);}
 
-<END>. {printf("RESULTADO NUMERO: %d\n", validate(g));}
-
-. {printf("Error! Not a valid Grammar"); return 1;}
+. {printf("Error! Not a valid Grammar\n"); return 1;}
 
 %%
 
-void errorFound(ErrorCodes err){
-	//TODO SUPER SWITCH
-	//TODO FREE?
-	return ;
+void processErrors(ErrorCodes err){
+	printf("RESULTADO NUMERO: %d\n", err);
+}
+
+ErrorCodes processGrammar(Grammar g){
+	printf("ANTES\n");
+	processErrors(validate(g));
+	printf("DESPUES\n");
+	removeUnreachableProductions(g);
 }
 
 int main(void){
 	g=newGrammar();
+	done=false;
 	yylex();
 	return 0;
 }
