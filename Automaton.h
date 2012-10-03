@@ -1,5 +1,5 @@
-#ifndef Automaton_h
-#define Automaton_h
+#ifndef automaton_h
+#define automaton_h
 
 #define MARK 1
 #define UNMARK 0
