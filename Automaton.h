@@ -3,6 +3,8 @@
 
 #define MARK 1
 #define UNMARK 0
+#define EQUALS 1
+
 
 typedef state{
 	char K;
@@ -23,6 +25,8 @@ typedef automaton{
 	List finals; //estados finales
 	state q0; //inicial	
 	List delta; //funcion de transicion; recordar hacer la list para deltas
-}
+}automaton;
+
+typedef automaton * Automaton;
 
 #endif

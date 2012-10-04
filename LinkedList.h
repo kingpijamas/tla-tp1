@@ -15,6 +15,8 @@ typedef lelement * Element;
 
 //Generic List Structure
 typedef struct llist {
+	char name;
+	int mark = 0;
     int NumEl;   //Number of lelement * s in list
     Element  pFirst;  //Ptr to first lelement *  in list
     Element  pLast;   //Ptr to last lelement *  in list
