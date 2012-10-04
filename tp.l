@@ -58,7 +58,8 @@ blank	[ \t\n]
 
 <EXPECTINGTRANSITIONS>\} {printf("Done parsing automaton\n");}
 
-\/\/.* ;
+\/\/.* ;p
+
 
 <INITIAL>{letter}([^ \n\t])* {g=newGrammar();g->name=strdup(yytext);printf("\nyytext: %s gramName:%s\n",yytext,g->name); BEGIN START;}
 <START>={blank}*\({blank}*\{ {printf("START\n"); BEGIN NONTERMINALS;}
