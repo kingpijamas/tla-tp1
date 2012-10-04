@@ -150,7 +150,7 @@
 // 					addToList(s,F->stateList);	
 
 // 					existTran = 0;
-// 					FOR_EACH(ptr3 = F->delta->pFirst; ptr3!=NULL && !existTran; ptr3=ptr3->next){
+// 					for(ptr3 = F->delta->pFirst; ptr3!=NULL && !existTran; ptr3=ptr3->next){
 // 						if(((Transition)ptr3->data)->from->K == ((List)ptr->data)->name){
 // 							existTran = 1;
 // 						}
@@ -238,7 +238,7 @@ Grammar fromAFDtoGR(Automaton M){
 					
 						// Si r pertenece a finales
 						isFinal = 0;	
-						FOR_EACH(ptr3 = M->finals->pFirst; ptr3!=NULL && !isFinal; ptr3=ptr3->next){
+						for(ptr3 = M->finals->pFirst; ptr3!=NULL && !isFinal; ptr3=ptr3->next){
 							f = ((State)prt3->data)->K;
 							if(f == r){
 								isFinal = 1;
@@ -269,4 +269,8 @@ Grammar fromAFDtoGR(Automaton M){
 	}
 
 	return  G;
+}
+
+int main(void){
+	return 0;
 }

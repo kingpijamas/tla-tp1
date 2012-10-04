@@ -10,8 +10,4 @@
 List clausuraLambda(List Q, Automaton M);
 List mover(List T, Automaton M, char a);
 
-
-
-
-
 #endif
