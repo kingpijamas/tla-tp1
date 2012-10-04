@@ -5,7 +5,7 @@
 #include "LinkedList.h"
 #include "Grammar.h"
 
-typedef struct relation{	
+typedef struct relation{
 	char reachable;
 	Element elem;
 }relation;
@@ -14,12 +14,12 @@ typedef relation * Relation;
 typedef Relation * RelationMatrix;
 
 typedef enum {
-	OK=0,INVALID_DIST,INVALID_FROM,INVALID_NONTERMINAL,INVALID_TERMINAL,DIST_NOT_USED
-} ErrorCodes;
+	INVALID_DIST=!NO_ERROR,INVALID_FROM,INVALID_NONTERMINAL,INVALID_TERMINAL,DIST_NOT_USED
+} GrammarErrorCodes;
 
 RelationMatrix generateRelationMatrix(Grammar g, int n);//n is the size of production
 void findReachableProductions(RelationMatrix t,int n);//uses Warshall's algorithm
 void removeUnreachableProductions(Grammar g);
-ErrorCodes validate(Grammar g);
+GrammarErrorCodes validate(Grammar g);
 
 #endif

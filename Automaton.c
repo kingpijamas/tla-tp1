@@ -5,10 +5,23 @@ Automaton newAutomaton(){
 	if(a==NULL){
 		printf("<LOG - Automaton.c>\n\tInsufficient memory.\n<end>\n");
 	}
+	a->hasInitial=false;
 	a->stateList=newList();
 	a->finals=newList();
 	a->delta=newList();
 	return a;
+}
+
+AutomatonErrorCodes addState(Automaton a,State s){
+	if(s->number==INITIALSTATE){
+		if(a->hasInitial){
+			return TWO_INITIAL_STATES;
+		}else{
+			a->hasInitial=true;
+		}
+	}
+	addToList(s,a->stateList);
+	return NO_ERROR;
 }
 
 State newState(){

@@ -7,7 +7,7 @@
 #include "Automaton.h"
 #include "postProcessing.h"
 
-void processErrors(ErrorCodes err);
+void processErrors(int err);
 void processGrammar(Grammar g);
 
 #endif
