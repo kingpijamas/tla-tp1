@@ -8,7 +8,7 @@
 
 typedef state{
 	char K;
-	int mark = 0;
+	int mark;
 }
 
 typedef transition{
