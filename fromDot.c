@@ -271,6 +271,4 @@ Grammar fromAFDtoGR(Automaton M){
 	return  G;
 }
 
-int main(void){
-	return 0;
-}
+

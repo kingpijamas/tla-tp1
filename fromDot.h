@@ -6,8 +6,7 @@
 #include "LinkedList.h"
 #include "Grammar.h"
 
+Grammar fromAFDtoGR(Automaton M);
 
-List clausuraLambda(List Q, Automaton M);
-List mover(List T, Automaton M, char a);
 
 #endif
