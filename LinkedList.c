@@ -1,5 +1,14 @@
 #include "LinkedList.h"
 
+List newList(){
+	List l=malloc(sizeof(llist));
+	if(l==NULL){
+		printf("<LOG - LinkedList.c>\n\tInsufficient memory.\n<end>\n");
+	}
+	initList(l);
+	return l;
+}
+
 void initList(List list){
 	list->NumEl = 0;
 	list->pFirst = NULL;
@@ -60,7 +69,6 @@ void addElemToList(Element NewEl, List list){
 
 
 void removeElemFromList(Element elem, List list){
-	
 	Element item;
 	int flag;
 
@@ -69,12 +77,10 @@ void removeElemFromList(Element elem, List list){
 			flag = 1;
 			break;
 		}
-	}
-	
+	}	
 	if(flag == 0){
 		return;
-	}
-		
+	}	
 	/* Soy el primero */
 	if(list->pFirst == elem){
 		list->pFirst = elem->next;
@@ -93,11 +99,8 @@ void removeElemFromList(Element elem, List list){
 		elem->prev->next = elem->next;
 		elem->next->prev = elem->prev;
 	}
-	
 	elem->prev = NULL;
 	elem->next = NULL;
-	
 	(list->NumEl)--;
-	
 	return;
 }

@@ -1,12 +1,10 @@
 %{
 	#include "tp.h"
 
-//	Automaton a;
+	Automaton a;
 
 	Grammar g;
 	Production p;
-//<DOTSTATESTART>. {printf("%s",yytext);}
-
 %}
 
 digit	[0-9]
@@ -42,8 +40,7 @@ blank	[ \t\n]
 %%
 {blank}+ ;
 
-<INITIAL>digraph{blank}*\{{blank}*rankdir{blank}*={blank}*"LR"{blank}*; {printf("Parsing DOT\n");BEGIN 
-EXPECTINGNODESSTART;}
+<INITIAL>digraph{blank}*\{{blank}*rankdir{blank}*={blank}*"LR"{blank}*; {a=newAutomaton();printf("Parsing DOT\n"); BEGIN EXPECTINGNODESSTART;}
 <EXPECTINGNODESSTART>\/\/{blank}+Nodos{blank}+ {printf("Parsing Nodes\n");BEGIN EXPECTINGNODES;}
 <EXPECTINGNODES>node{blank}*\[{blank}*shape{blank}*={blank}* {printf("Parsing states\n");BEGIN DOTSTATETYPE;}
 <DOTSTATETYPE>circle {printf("Parsing non terminal state\n"); BEGIN DOTSTATENO;}
@@ -62,7 +59,7 @@ EXPECTINGNODESSTART;}
 
 \/\/.* ;
 
-<INITIAL>{letter}([^ \n\t])* {g->name=strdup(yytext);printf("\nyytext: %s gramName:%s\n",yytext,g->name); BEGIN START;}
+<INITIAL>{letter}([^ \n\t])* {g=newGrammar();g->name=strdup(yytext);printf("\nyytext: %s gramName:%s\n",yytext,g->name); BEGIN START;}
 <START>={blank}*\({blank}*\{ {printf("START\n"); BEGIN NONTERMINALS;}
 <NONTERMINALS>{upper}{blank}*, {yytext[1]=0; addNonTerminal(g,yytext);printf("nonTerminals %s\n",g->nonTerminals);}
 <NONTERMINALS>{upper}{blank}*\}{blank}*,{blank}*\{ {yytext[1]=0; addNonTerminal(g,yytext); printf("nonTerminals %s\n",g->nonTerminals);BEGIN TERMINALS;}
@@ -103,7 +100,6 @@ void processGrammar(Grammar g){
 }
 
 int main(void){
-	g=newGrammar();
 	yylex();
 	return 0;
 }
