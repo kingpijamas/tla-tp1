@@ -8,5 +8,4 @@
 
 Grammar fromAFDtoGR(Automaton M);
 
-
 #endif

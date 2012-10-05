@@ -1,6 +1,6 @@
 #include "postProcessing.h"
 
-ErrorCodes validate(Grammar g){
+GrammarErrorCodes validate(Grammar g){
 	//Validacion que los "from" esten contenidos en NoTerm y el dist esta en algun from	
 	char useDist = false;
 	Element e;
@@ -34,7 +34,7 @@ ErrorCodes validate(Grammar g){
 	if(useDist == false){
 		return DIST_NOT_USED;
 	}
-	return OK;
+	return NO_ERROR;
 }
 
 void removeUnreachableProductions(Grammar g){

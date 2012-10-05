@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define NO_ERROR 0
+
 typedef enum {
 	false=0,true
 } boolean;
@@ -14,5 +16,6 @@ int indexOf(char * s, char c);
 int indexOfLast(char * s);
 char * concat(char * s, char * t);
 char * strdup(const char * s);
+char getLast(char * s);
 
 #endif

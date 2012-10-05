@@ -1,12 +1,11 @@
 %{
 	#include "tp.h"
 
-//	Automaton a;
+	Automaton a;
+	State s;
 
 	Grammar g;
 	Production p;
-//<DOTSTATESTART>. {printf("%s",yytext);}
-
 %}
 
 digit	[0-9]
@@ -42,16 +41,15 @@ blank	[ \t\n]
 %%
 {blank}+ ;
 
-<INITIAL>digraph{blank}*\{{blank}*rankdir{blank}*={blank}*"LR"{blank}*; {printf("Parsing DOT\n");BEGIN 
-EXPECTINGNODESSTART;}
+<INITIAL>digraph{blank}*\{{blank}*rankdir{blank}*={blank}*"LR"{blank}*; {a=newAutomaton();printf("Parsing DOT\n"); BEGIN EXPECTINGNODESSTART;}
 <EXPECTINGNODESSTART>\/\/{blank}+Nodos{blank}+ {printf("Parsing Nodes\n");BEGIN EXPECTINGNODES;}
-<EXPECTINGNODES>node{blank}*\[{blank}*shape{blank}*={blank}* {printf("Parsing states\n");BEGIN DOTSTATETYPE;}
-<DOTSTATETYPE>circle {printf("Parsing non terminal state\n"); BEGIN DOTSTATENO;}
-<DOTSTATETYPE>doublecircle {printf("Parsing terminal state\n"); BEGIN DOTSTATENO;}
-<DOTSTATENO>{blank}*\]{blank}*Node{digit}+ {printf("Parsing number %s\n",yytext); BEGIN DOTSTATELABEL;}
+<EXPECTINGNODES>node{blank}*\[{blank}*shape{blank}*={blank}* {s=newState();printf("Parsing states\n");BEGIN DOTSTATETYPE;}
+<DOTSTATETYPE>circle {s->terminal=false;printf("Parsing non terminal state\n"); BEGIN DOTSTATENO;}
+<DOTSTATETYPE>doublecircle {s->terminal=true;printf("Parsing terminal state\n"); BEGIN DOTSTATENO;}
+<DOTSTATENO>{blank}*\]{blank}*Node{digit}+ {s->number=getLast(yytext);printf("Parsing number %s Loaded:%c\n",yytext,s->number); BEGIN DOTSTATELABEL;}
 <DOTSTATELABEL>{blank}*\[{blank}*label{blank}*={blank}* {BEGIN DOTSTATELABELNO;}
-<DOTSTATELABELNO>{digit}+ {printf("Parsing label %s\n",yytext); BEGIN DOTSTATEEND;}
-<DOTSTATEEND>{blank}*\]{blank}*; {printf("Done parsing state\n"); BEGIN EXPECTINGNODES;}
+<DOTSTATELABELNO>{digit}+ {s->label=getLast(yytext);printf("Parsing label %s Loaded:%c\n",yytext,s->label); BEGIN DOTSTATEEND;}
+<DOTSTATEEND>{blank}*\]{blank}*; {processErrors(addState(a,s));printf("Done parsing state\n"); BEGIN EXPECTINGNODES;}
 
 <EXPECTINGNODES>\/\/{blank}*Transiciones{blank}+ {printf("Parsing transitions\n"); BEGIN EXPECTINGTRANSITIONS;}
 <EXPECTINGTRANSITIONS>Node{blank}*{digit}+{blank}*-\> {printf("Parsing transition from %s\n", yytext);BEGIN TRANSITIONTO;}
@@ -62,7 +60,7 @@ EXPECTINGNODESSTART;}
 
 \/\/.* ;
 
-<INITIAL>{letter}([^ \n\t])* {g->name=strdup(yytext);printf("\nyytext: %s gramName:%s\n",yytext,g->name); BEGIN START;}
+<INITIAL>{letter}([^ \n\t])* {g=newGrammar();g->name=strdup(yytext);printf("\nyytext: %s gramName:%s\n",yytext,g->name); BEGIN START;}
 <START>={blank}*\({blank}*\{ {printf("START\n"); BEGIN NONTERMINALS;}
 <NONTERMINALS>{upper}{blank}*, {yytext[1]=0; addNonTerminal(g,yytext);printf("nonTerminals %s\n",g->nonTerminals);}
 <NONTERMINALS>{upper}{blank}*\}{blank}*,{blank}*\{ {yytext[1]=0; addNonTerminal(g,yytext); printf("nonTerminals %s\n",g->nonTerminals);BEGIN TERMINALS;}
@@ -91,7 +89,7 @@ EXPECTINGNODESSTART;}
 
 %%
 
-void processErrors(ErrorCodes err){
+void processErrors(int err){
 	printf("RESULTADO NUMERO: %d\n", err);
 }
 
@@ -103,7 +101,6 @@ void processGrammar(Grammar g){
 }
 
 int main(void){
-	g=newGrammar();
 	yylex();
 	return 0;
 }

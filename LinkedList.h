@@ -27,6 +27,7 @@ typedef llist * List;
 #define FOR_EACH(item_ptr, myList) \
      for (item_ptr = myList->pFirst; item_ptr != NULL; item_ptr=item_ptr->next)
 
+List newList();
 void initList(List list);
 Element addToList(void *item, List list);
 void addElemToList(Element NewEl, List list);
