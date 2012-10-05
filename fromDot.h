@@ -9,5 +9,6 @@
 
 Grammar fromAFDtoGR(Automaton M);
 void printAutomaton(Automaton M);
+char * GrammarToString(Grammar G);
 
 #endif
