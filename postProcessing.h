@@ -23,6 +23,6 @@ Grammar removeUnreachableProductions(Grammar g);
 Grammar removeUnproductiveNodes(Grammar g);
 Grammar toNormalRight(Grammar g);
 Grammar normalize(Grammar g);
-GrammarErrorCodes validate(Grammar g);
+GrammarErrorCodes validateGrammar(Grammar g);
 
 #endif

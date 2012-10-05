@@ -1,6 +1,6 @@
 #include "postProcessing.h"
 
-GrammarErrorCodes validate(Grammar g){
+GrammarErrorCodes validateGrammar(Grammar g){
 	//Validacion que los "from" esten contenidos en NoTerm y el dist esta en algun from	
 	char useDist = false;
 	Element e;

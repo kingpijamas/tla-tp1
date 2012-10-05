@@ -1,5 +1,15 @@
 #include "fromDot.h"
 
+AutomatonErrorCodes validateAutomaton(Automaton a){
+	Element elem;
+	FOR_EACH(elem,a->stateList){
+		if(((State)elem->data)->visited==false){
+			return DISCONNECTED_STATE;
+		}
+	}
+	return NO_ERROR;
+}
+
 void printAutomaton(Automaton M){
 	int i;
 	Element elem,elem2,elem3;

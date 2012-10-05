@@ -6,18 +6,16 @@
 
 #define INITIALSTATE 0
 
-#define MARK 1
-#define UNMARK 0
 #define EQUALS 1
 
 
 typedef enum {
-	TWO_INITIAL_STATES=1
+	TWO_INITIAL_STATES=1,REFERENCING_UNEXISTENT_STATE,DISCONNECTED_STATE
 } AutomatonErrorCodes;
 
 typedef struct state {
 	char K;
-	int mark;
+	int visited;
 	boolean terminal;
 	char number;
 }state;

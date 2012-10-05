@@ -59,7 +59,8 @@ blank	[ \t\n]
 <DOTSTATEEND>{blank}*\]{blank}*; {processErrors(addState(a,s));printf("Done parsing state\n"); BEGIN EXPECTINGNODES;}
 
 <EXPECTINGNODES>\/\/{blank}*Transiciones{blank}+ {printf("Parsing transitions\n"); BEGIN EXPECTINGTRANSITIONS;}
-<EXPECTINGTRANSITIONS>Node{blank}*{digit}+{blank}*-\> {t=newTransition();t->from=getState(a,getLastDigit(yytext));printf("Parsing transition from: %s, t->from=%d\n", yytext,getLastDigit(yytext));BEGIN TRANSITIONTO;}
+<EXPECTINGTRANSITIONS>Node{blank}*{digit}+{blank}*-\> {t=newTransition();t->from=getState(a,getLastDigit(yytext));processErrors(validateState(t->from));
+printf("Parsing transition from: %s, t->from=%d\n", yytext,getLastDigit(yytext));BEGIN TRANSITIONTO;}
 <TRANSITIONTO>Node{blank}*{digit} {addTo(t,getState(a,getLastDigit(yytext)));printf("Parsing transition to %s\n",yytext); BEGIN TRANSITIONBY;}
 <TRANSITIONBY>\[{blank}*label{blank}*={blank}*{letter} {addBy(t,getLast(yytext));addTransition(a,t);printf("Done parsing transition\n"); BEGIN TRANSITIONEND;}
 <TRANSITIONEND>\]{blank}*; {BEGIN EXPECTINGTRANSITIONS;}
@@ -125,31 +126,47 @@ void processErrors(int err){
 	if(err == NO_ERROR){
 		return;
 	}
-	switch( err ) {
-	case INVALID_DIST:
-		printf("Error! El distinguido no es parte de los no terminales.\n");
-		break;
-	case INVALID_FROM:
-		printf("Error! Al menos uno de los no terminales que producen no esta declarado.\n");
-		break;
-	case INVALID_NONTERMINAL:
-		printf("Error! Al menos uno de los no terminales producidos no esta declarado.\n");
-		break;
-	case INVALID_TERMINAL:
-		printf("Error! Al menos uno de los terminales en la produccion no esta en el alfabeto.\n");
-		break;
-	case DIST_NOT_USED:
-		printf("Error! El no terminal distinguido no tiene produccion.\n");
-		break;
-	default :
-		;
+	if(whereAmI()==INAUTOMATON){
+		switch(err){
+		case TWO_INITIAL_STATES:
+			printf("Error! Hay mas de un estado incial.\n");
+			break;
+		case REFERENCING_UNEXISTENT_STATE:
+			printf("Error! Se esta referenciando un estado inexistente.\n");
+			break;
+		case DISCONNECTED_STATE:
+			printf("Error! El automata no es conexo.\n");
+			break;
+		default:
+			;
+		}
+	}else{
+		switch( err ) {
+		case INVALID_DIST:
+			printf("Error! El distinguido no es parte de los no terminales.\n");
+			break;
+		case INVALID_FROM:
+			printf("Error! Al menos uno de los no terminales que producen no esta declarado.\n");
+			break;
+		case INVALID_NONTERMINAL:
+			printf("Error! Al menos uno de los no terminales producidos no esta declarado.\n");
+			break;
+		case INVALID_TERMINAL:
+			printf("Error! Al menos uno de los terminales en la produccion no esta en el alfabeto.\n");
+			break;
+		case DIST_NOT_USED:
+			printf("Error! El no terminal distinguido no tiene produccion.\n");
+			break;
+		default :
+			;
+		}
 	}
 	exit(1);
 }
 
 void processGrammar(Grammar g){
+	processErrors(validateGrammar(g));
 	printGrammar(g);
-	processErrors(validate(g));
 	g = toNormalRight(g);
 	g = removeUnreachableProductions(g);
 	g = removeUnproductiveNodes(g);
@@ -159,12 +176,13 @@ void processGrammar(Grammar g){
 }
 
 void processAutomaton(Automaton a){
+	processErrors(validateAutomaton(a));
 	printAutomaton(a);
 	FILE *fp;
 	fp=fopen("out.gr", "w");
 	fprintf(fp, "%s", grammarToString(fromAFDtoGR(a)));
 	fclose(fp);
-	printf("Conversión de formato '.dot' a '.gr' completa, favor de abrir: '%s'\n","out.gr");
+	printf("Conversion de formato '.dot' a '.gr' completa, favor de abrir: '%s'\n","out.gr");
 }
 
 int main(void){

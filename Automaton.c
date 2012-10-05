@@ -18,7 +18,7 @@ State newState(){
 	if(s==NULL){
 		newInsufficientMemoryException("Automaton");
 	}
-	s->mark=0;
+	s->visited=false;
 	return s;
 }
 
@@ -47,8 +47,14 @@ State getState(Automaton a,int number){
 			return s;
 		}
 	}
-	printf("<LOG - Automaton.c>\n\tUnexistent state %d.\n<end>\n",number);
 	return NULL;
+}
+
+AutomatonErrorCodes validateState(State s){
+	if(s==NULL){
+		return REFERENCING_UNEXISTENT_STATE;
+	}
+	return NO_ERROR;
 }
 
 Transition newTransition(){
@@ -65,6 +71,7 @@ void addBy(Transition t, char c){
 }
 
 void addTo(Transition t, State s){
+	s->visited=true;
 	addToList(s,t->to);
 }
 
