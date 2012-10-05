@@ -203,14 +203,14 @@ Grammar fromAFDtoGR(Automaton M){
 	Element ptr,ptr2,ptr3;
 
 	//0_ Cargo q0 como dist
-	G->dist = M->q0->K;
+	G->dist = M->q0.K;
 
 	//1_ Cargo los terminales
 	addTerminal(G,M->sigma);
 	
 	//2_ Cargo los no terminales en nonTerminals con mayusculas
 	// y luego los cargo en la gramatica
-	for(i = 0, ptr = M->stateList ; ptr!=NULL; i++, ptr=ptr->next){
+	for(i = 0, ptr = M->stateList->pFirst ; ptr!=NULL; i++, ptr=ptr->next){
 		nonTerminals[i] = toupper(((State)ptr->data)->K);
 	}
 	nonTerminals[i] = 0;
@@ -226,7 +226,7 @@ Grammar fromAFDtoGR(Automaton M){
 			
 			FOR_EACH(ptr, M->delta){
 				tran = (Transition)ptr->data;
-				if(tran->from->K==q && tran->by==a){			
+				if(tran->from.K==q && tran->by==a){			
 					// Agrego todos los r
 					FOR_EACH(ptr2, tran->to){
 						r = ((State)ptr->data)->K; 
@@ -239,7 +239,7 @@ Grammar fromAFDtoGR(Automaton M){
 						// Si r pertenece a finales
 						isFinal = 0;	
 						for(ptr3 = M->finals->pFirst; ptr3!=NULL && !isFinal; ptr3=ptr3->next){
-							f = ((State)prt3->data)->K;
+							f = ((State)ptr3->data)->K;
 							if(f == r){
 								isFinal = 1;
 							}
@@ -259,7 +259,7 @@ Grammar fromAFDtoGR(Automaton M){
 
 	//4_ si q0 es final, agrego esa tran
 	FOR_EACH(ptr3, M->finals){
-		f = ((State)prt3->data)->K;
+		f = ((State)ptr3->data)->K;
 		if(f == G->dist){
 			prod = malloc(sizeof(prod));
 			prod->from = G->dist;
