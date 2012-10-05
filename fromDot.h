@@ -7,5 +7,6 @@
 #include "Grammar.h"
 
 Grammar fromAFDtoGR(Automaton M);
+void printAutomaton(Automaton M);
 
 #endif

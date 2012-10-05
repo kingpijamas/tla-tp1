@@ -41,7 +41,7 @@ typedef struct automaton{
 	List stateList; //conjunto de estados
 	char * sigma; //alfabeto
 	List finals; //estados finales
-	state q0; //inicial	
+	State q0; //inicial	
 	List delta; //funcion de transicion; recordar hacer la list para deltas
 }automaton;
 

@@ -3,7 +3,7 @@
 Grammar fromAFDtoGR(Automaton M){
 
 	Grammar G = malloc(sizeof(grammar));
-	G->productions = malloc(sizeof(llist));
+	
 	char * nonTerminals = malloc(1 + M->stateList->NumEl);
 	int i,j, isFinal;
 	char q,a,r,f;
@@ -12,7 +12,11 @@ Grammar fromAFDtoGR(Automaton M){
 	Element ptr,ptr2,ptr3;
 
 	//0_ Cargo q0 como dist
-	G->dist = M->q0.K;
+	G->name = "G";
+	G->dist = M->q0->K;
+	G->productions = malloc(sizeof(llist));
+	G->dir = RIGHT;
+	
 
 	//1_ Cargo los terminales
 	addTerminal(G,M->sigma);
@@ -74,4 +78,65 @@ Grammar fromAFDtoGR(Automaton M){
 	}
 
 	return  G;
+}
+
+void printAutomaton(Automaton M){
+
+	int i;
+	Element elem,elem2,elem3;
+	Transition tran;
+	State s;
+	printf("ALFABETO: Los simbolos terminales son:\n");
+
+	for(i=0; (M->sigma)[i]!= 0; i++){
+		printf("%c  ",(M->sigma)[i]);
+	}
+	printf("\n");
+
+	printf("ESTADOS:\n");
+
+	FOR_EACH(elem, M->stateList){
+		printf("%c  ",((State)elem->data)->K);
+	}
+	printf("\n");
+
+	printf("ESTADO INICIAL: %c\n", M->q0.K);
+
+	printf("ESTADOS FINALES:\n");
+
+	FOR_EACH(elem, M->finals){
+		printf("%c  ",((State)elem->data)->K);
+	}
+	printf("\n");
+
+	printf("  DELTA  ||");
+
+	for(i=0; (M->sigma)[i] != 0; i++){
+		printf("  %c  |",(M->sigma)[i]);		
+	}
+
+	FOR_EACH(elem, M->stateList){
+	
+		s = (State)elem->data;
+		printf("    %c    ||\n", s->K);
+
+		FOR_EACH(elem2, M->delta){
+			tran = (Transition)elem2->data;
+			if(tran->from.K == s->K){
+				for(i=0; (M->sigma)[i] != 0; i++){
+					if((M->sigma)[i] == tran->by){
+						FOR_EACH(elem3, tran->to){
+							printf("  %c  |",((State)elem->data)->K);
+						
+						}
+					}else{
+						printf("      |");
+					}
+				}
+			}
+		}
+
+	}
+
+	return;
 }
