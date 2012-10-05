@@ -5,6 +5,7 @@
 #include "LinkedList.h"
 #include "Grammar.h"
 #include "Automaton.h"
+#include "fromDot.h"
 #include "postProcessing.h"
 
 void processErrors(int err);

@@ -140,7 +140,7 @@ void printAutomaton(Automaton M){
 	return;
 }
 
-char * GrammartoString(Grammar G){
+char * GrammarToString(Grammar G){
 
 	char * string = NULL;
 	char * aux = malloc(3);
