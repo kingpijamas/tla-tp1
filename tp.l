@@ -48,20 +48,20 @@ blank	[ \t\n]
 
 \/\/.*[\n] ;
 
-<EXPECTINGNODESSTART>\/\/{blank}+Nodos{blank}+ {printf("Parsing Nodes\n");BEGIN EXPECTINGNODES;}
+<EXPECTINGNODESSTART>\/\/{blank}*Nodos{blank}+ {printf("Parsing Nodes\n");BEGIN EXPECTINGNODES;}
 <EXPECTINGNODES>node{blank}*\[{blank}*shape{blank}*={blank}* {s=newState();printf("Parsing states\n");BEGIN DOTSTATETYPE;}
 <DOTSTATETYPE>circle {s->terminal=false;printf("Parsing non terminal state\n"); BEGIN DOTSTATENO;}
 <DOTSTATETYPE>doublecircle {s->terminal=true;printf("Parsing terminal state\n"); BEGIN DOTSTATENO;}
 <DOTSTATENO>{blank}*\]{blank}*Node{digit}+ {s->number=getLastDigit(yytext);printf("Parsing number:%s Loaded:%d\n",yytext,s->number); BEGIN DOTSTATELABEL;}
 <DOTSTATELABEL>{blank}*\[{blank}*label{blank}*={blank}* {BEGIN DOTSTATELABELNO;}
 
-<DOTSTATELABELNO>{digit}+ {s->label=getLast(yytext);printf("Parsing label %s Loaded:%c\n",yytext,s->label); BEGIN DOTSTATEEND;}
+<DOTSTATELABELNO>{letter} {s->K=getLast(yytext);printf("Parsing label %s Loaded:%c\n",yytext,s->K); BEGIN DOTSTATEEND;}
 <DOTSTATEEND>{blank}*\]{blank}*; {addState(a,s);printf("Done parsing state\n"); BEGIN EXPECTINGNODES;}
 
 <EXPECTINGNODES>\/\/{blank}*Transiciones{blank}+ {printf("Parsing transitions\n"); BEGIN EXPECTINGTRANSITIONS;}
 <EXPECTINGTRANSITIONS>Node{blank}*{digit}+{blank}*-\> {t=newTransition();t->from=getState(a,getLastDigit(yytext));printf("Parsing transition from: %s\n", yytext);BEGIN TRANSITIONTO;}
 <TRANSITIONTO>Node{blank}*{digit} {addTo(t,getState(a,getLastDigit(yytext)));printf("Parsing transition to %s\n",yytext); BEGIN TRANSITIONBY;}
-<TRANSITIONBY>\[{blank}*label{blank}*={blank}*({letter}|{digit}) {t->by=getLast(yytext);addTransition(a,t);printf("Done parsing transition\n"); BEGIN TRANSITIONEND;}
+<TRANSITIONBY>\[{blank}*label{blank}*={blank}*{letter} {addBy(t,getLast(yytext));addTransition(a,t);printf("Done parsing transition\n"); BEGIN TRANSITIONEND;}
 <TRANSITIONEND>\]{blank}*; {BEGIN EXPECTINGTRANSITIONS;}
 <EXPECTINGTRANSITIONS>\} {printf("Done parsing automaton\n"); printAutomaton(a);}
 

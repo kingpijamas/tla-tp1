@@ -84,59 +84,70 @@ void printAutomaton(Automaton M){
 
 	int i;
 	Element elem,elem2,elem3;
-	Transition tran;
+	Transition tran,tran2;
 	State s;
-	printf("ALFABETO: Los simbolos terminales son:\n");
+	printf("\n\n ALFABETO: Los simbolos terminales son:\n");
 
 	for(i=0; (M->sigma)[i]!= 0; i++){
 		printf("%c  ",(M->sigma)[i]);
 	}
-	printf("\n");
+	printf("\n\n");
 
-	printf("ESTADOS:\n");
-
+	printf(" ESTADOS:\n");
 	FOR_EACH(elem, M->stateList){
 		printf("%c  ",((State)elem->data)->K);
 	}
-	printf("\n");
+	printf("\n\n");
 
-	printf("ESTADO INICIAL: %c\n", M->q0->K);
-
-	printf("ESTADOS FINALES:\n");
-
+	printf(" ESTADO INICIAL: \n%c\n\n", M->q0->K);
+	
+	printf(" ESTADOS FINALES:\n");
 	FOR_EACH(elem, M->finals){
 		printf("%c  ",((State)elem->data)->K);
 	}
 	printf("\n");
-
-	printf("  DELTA  ||");
-
-	for(i=0; (M->sigma)[i] != 0; i++){
-		printf("  %c  |",(M->sigma)[i]);		
-	}
-
-	FOR_EACH(elem, M->stateList){
 	
-		s = (State)elem->data;
-		printf("    %c    ||\n", s->K);
 
-		FOR_EACH(elem2, M->delta){
-			tran = (Transition)elem2->data;
-			if(tran->from->K == s->K){
-				for(i=0; (M->sigma)[i] != 0; i++){
-					if((M->sigma)[i] == tran->by){
-						FOR_EACH(elem3, tran->to){
-							printf("  %c  |",((State)elem->data)->K);
-						
-						}
-					}else{
-						printf("      |");
-					}
-				}
-			}
+ 	printf("\n\n Transiciones:\n\n");	
+	FOR_EACH(elem, M->delta){
+		tran2 = (Transition)elem->data;
+		FOR_EACH(elem2,tran2->to){
+			printf("%c -> %c %c\n", tran2->from->K, tran2->by,((State)elem2->data)->K);	
 		}
-
 	}
+
+
+	// printf("\n\n Tabla de transiciones\n\n");
+	// printf("  DELTA  ||");
+	// for(i=0; (M->sigma)[i] != 0; i++){
+	// 	printf("  %c  |",(M->sigma)[i]);		
+	// }
+
+	// FOR_EACH(elem, M->stateList){
+	// 	printf("\n");
+	// 	s = (State)elem->data;
+	// 	printf("    %c    ||", s->K);
+
+	// 	FOR_EACH(elem2, M->delta){
+
+	// 		tran = (Transition)elem2->data;
+	// 		if(tran->from->K == s->K){
+	// 			for(i=0; (M->sigma)[i] != 0; i++){
+	// 				if((M->sigma)[i] == tran->by){
+	// 					FOR_EACH(elem3, tran->to){
+			
+	// 						printf("  %c  |",((State)elem->data)->K);
+						
+	// 					}
+	// 				}else{
+	// 					printf("     |");
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
+
+	printf("\n");
 
 	return;
 }

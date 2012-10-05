@@ -5,6 +5,7 @@ Automaton newAutomaton(){
 	if(a==NULL){
 		printf("<LOG - Automaton.c>\n\tInsufficient memory.\n<end>\n");
 	}
+	a->sigma="";
 	a->hasInitial=false;
 	a->stateList=newList();
 	a->finals=newList();
@@ -27,7 +28,11 @@ void addState(Automaton a,State s){
 			printf("<LOG - Automaton.c>\n\tTWO_INITIAL_STATES.\n<end>\n");
 		}else{
 			a->hasInitial=true;
+			a->q0 = s;
 		}
+	}
+	if(s->terminal){
+		addToList(s,a->finals);
 	}
 	addToList(s,a->stateList);
 }
@@ -54,10 +59,33 @@ Transition newTransition(){
 	return t;
 }
 
+void addBy(Transition t, char c){
+	t->by=c;
+}
+
 void addTo(Transition t, State s){
 	addToList(s,t->to);
 }
 
 void addTransition(Automaton a,Transition t){
-	addToList(t,t->to);
+	
+	int i,contains;
+	
+	
+	contains = 0;
+	for(i = 0; (a->sigma)[i] !=0 && !contains; i++){
+		if(a->sigma[i] == t->by){
+			contains = 1;
+		}		
+	}
+	if(!contains){
+
+		a->sigma = concat(strdup(a->sigma), stringify(t->by));
+		
+	}	
+	
+	addToList(t,a->delta);
+
 }
+
+

@@ -18,10 +18,9 @@ typedef enum {
 typedef struct state {
 	char K;
 	int mark;
-
 	boolean terminal;
 	char number;
-	char label;
+	
 }state;
 
 typedef state * State;
@@ -50,7 +49,9 @@ void addState(Automaton a,State s);
 State newState(void);
 Transition newTransition(void);
 State getState(Automaton a,int number);
+//void addFrom(Transition t, ???);
 void addTo(Transition t, State s);
+void addBy(Transition t, char c);
 void addTransition(Automaton a,Transition t);
 
 #endif
