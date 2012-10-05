@@ -134,15 +134,3 @@ void newException(char * filename,char * text){
 	printf("<LOG - %s.c>\n\t%s\n<end>\n", filename, text);
 	exit(1);
 }
-
-void underline(char * s){
-	if(s==NULL){
-		newException("utils","Null pointer");
-	}
-	char * buffer;
-	int i;
-	for(i=0;s[i]!='\0';i++){
-		buffer=concat(buffer,"=");
-	}
-	printf("%s,%s\n",s,buffer);
-}

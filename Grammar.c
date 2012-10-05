@@ -24,7 +24,6 @@ void addNonTerminal(Grammar g, char * from){
 }
 
 void addTerminal(Grammar g, char * from){
-	printf("llego\n");
 	if(g->terminals!=NULL && containsChar(g->terminals, from[0])){
 		printf("Duplicate terminal detected.\n Program terminated.\n");
 		exit(1);

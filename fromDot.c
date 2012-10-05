@@ -15,8 +15,13 @@ void printAutomaton(Automaton M){
 	printf("ESTADO INICIAL:\n%c\n", M->q0->K);
 	
 	printf("ESTADOS FINALES:\n");
+	boolean entered=false;
 	FOR_EACH(elem, M->finals){
 		printf("%c ",((State)elem->data)->K);
+		entered=true;
+	}
+	if(entered==false){
+		printf("-Ninguno-");
 	}
 	printf("\n");
 	
@@ -63,7 +68,6 @@ void printAutomaton(Automaton M){
 }
 
 Grammar fromAFDtoGR(Automaton M){
-	printf("Entro bien\n");
 	Grammar G = malloc(sizeof(grammar));
 	
 	char * nonTerminals = malloc(1 + M->stateList->NumEl);
@@ -139,7 +143,6 @@ Grammar fromAFDtoGR(Automaton M){
 	}
 	return  G;
 }
-
 
 char * grammarToString(Grammar G){
 	char * string = NULL;

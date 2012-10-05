@@ -160,12 +160,11 @@ void processGrammar(Grammar g){
 
 void processAutomaton(Automaton a){
 	printAutomaton(a);
-	printf("imprime el automata bien\n");
 	FILE *fp;
 	fp=fopen("out.gr", "w");
-	printf("abre el file\n");
 	fprintf(fp, "%s", grammarToString(fromAFDtoGR(a)));
 	fclose(fp);
+	printf("Conversión de formato '.dot' a '.gr' completa, favor de abrir: '%s'\n","out.gr");
 }
 
 int main(void){
