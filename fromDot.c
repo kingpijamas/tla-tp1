@@ -1,7 +1,5 @@
 #include "fromDot.h"
 
-
-
 void printAutomaton(Automaton M){
 
 	int i;

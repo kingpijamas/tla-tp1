@@ -4,9 +4,10 @@
 #include "utils.h"
 #include "LinkedList.h"
 #include "Grammar.h"
+#include "toDot.h"
+#include "postProcessing.h"
 #include "Automaton.h"
 #include "fromDot.h"
-#include "postProcessing.h"
 
 void processErrors(int err);
 void processGrammar(Grammar g);

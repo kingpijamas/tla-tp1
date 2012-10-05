@@ -1,6 +1,5 @@
 #ifndef fromDot_h
 #define fromDot_h
-
 #include <stdio.h>
 #include <ctype.h>
 #include "Automaton.h"

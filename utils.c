@@ -1,7 +1,13 @@
 #include "utils.h"
 
 boolean containsChar(char * s, char c){
-	return indexOf(s,c)>=0;
+	int i;
+	for(i = 0; s[i] !=0; i++){
+		if(s[i] == c){
+			return true;
+		}
+	}
+	return false;
 }
 
 int indexOf(char * s, char c){
@@ -18,7 +24,7 @@ int indexOf(char * s, char c){
 int indexOfLast(char * s){
 	int i=strlen(s)-1;	
 	while(i>0){
-		if(!(s[i]=='\t'||s[i]=='\n'||s[i]==' '||s[i]==','||s[i]=='|'||s[i]=='}' || s[i]==')')){
+		if(!(s[i]=='\t'||s[i]=='\n'||s[i]==' '||s[i]==','||s[i]=='|'||s[i]=='}' || s[i]==')' || s[i]==']')){
 			return i;
 		}		
 		i--;	
@@ -53,9 +59,30 @@ char * strdup(const char * s){
 	return d;
 }
 
+char * stringify(char c){
+	char * s = malloc(sizeof(char) * 2);
+	if(s == NULL){
+		printf("Not enough memory!");
+		exit(1);
+	}
+	s[0] = c;
+	s[1] = 0;
+	return s;
+}
+
+void cleanBuffer(char * buffer, int i){
+	free(buffer);
+	buffer = malloc(i*sizeof(char));
+	if(buffer == NULL){
+		printf("Not enough memory!");
+		exit(1);
+	}
+}
+
 char getLast(char * s){
 	if(s==NULL){
 		printf("<LOG - utils.c>\n\tNull pointer.\n<end>\n");
+		exit(1);
 	}
 	return s[strlen(s)-1];
 }
@@ -63,6 +90,7 @@ char getLast(char * s){
 int getLastDigit(char * s){
 	if(s==NULL){
 		printf("<LOG - utils.c>\n\tNull pointer.\n<end>\n");
+		exit(1);
 	}
 	int i=0;
 	int last=-1;
@@ -74,20 +102,15 @@ int getLastDigit(char * s){
 	}
 	if(last==-1){
 		printf("<LOG - utils.c>\n\tString %s does not contain digits.\n<end>\n",s);
+		exit(1);
 	}
 	return last;
-}
-
-char * stringify(char c){
-	char * s=malloc(sizeof(char)*2);
-	s[0]=c;
-	s[1]='\0';
-	return s;
 }
 
 int ctoi(char c){
 	if(!isdigit(c)){
 		printf("<LOG - utils.c>\n\t%c is not a digit.\n<end>\n",c);
+		exit(1);
 	}
 	return c%'0';
 }

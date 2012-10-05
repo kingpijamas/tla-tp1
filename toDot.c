@@ -1,25 +1,47 @@
-#include <stdio.h>
-#include "Grammar.h"
+#include "toDot.h"
 
-void printAutomaton(Grammar g){
+void printAutomatonFromGrammar(Grammar g){
 	char * dot;
-	char buffer[100];
-	dot = concat(dot, sprintf(buffer, "digraph {\nrankdir = \"LR\";\t De izquierda a derecha\n\n//Nodos\n"));
+	char * buffer = malloc(50);
+	dot = strdup("digraph {\nrankdir = \"LR\";\t //De izquierda a derecha\n\n//Nodos\n");
 	int i = 0;
+	Element e;
+	Production p;
 	while(g->nonTerminals[i] != '\0'){
-		//if(existe produccion tal que nonTerminals[i] -> lambda){
-		dot = concat(dot, sprintf(buffer, "node	[shape=doublecircle] Node%c [label=\"%c\"];\n", nonTerminals[i], nonTerminals[i]));
-		//}else{
-		dot = concat(dot, sprintf(buffer, "node	[shape=circle] Node%c [label=\"%c\"];\n", nonTerminals[i], nonTerminals[i]));
-		//}
+		boolean flag = false;
+		FOR_EACH(e, g->productions){
+			p=(Production)e->data;
+			if(p->from == g->nonTerminals[i] && p->nonTerminal == 0 && p->terminal == '\\'){
+				flag = true;
+			}
+		}
+		cleanBuffer(buffer, 50);
+		if(flag){
+			sprintf(buffer, "node	[shape=doublecircle] Node%c [label=\"%c\"];\n", g->nonTerminals[i], g->nonTerminals[i]);
+			dot = concat(dot, buffer);
+		}else{
+			sprintf(buffer, "node	[shape=circle] Node%c [label=\"%c\"];\n", g->nonTerminals[i], g->nonTerminals[i]);
+			dot = concat(dot, buffer);
+		}
+		i++;
 	}
 	dot = concat(dot, "\n\n//Transiciones\n");
-	production * p;
-	FOR_EACH(p, g->productions){
-		dot = concat(dot, sprintf(buffer, "Node%c -> Node%c [label=\"%c\"];\n", p->from, p->nonTerminal, p->terminal));
+	FOR_EACH(e, g->productions){
+		p=(Production)e->data;
+		cleanBuffer(buffer, 50);
+		if(p->terminal != '\\'){
+			sprintf(buffer, "Node%c -> Node%c [label=\"%c\"];\n", p->from, p->nonTerminal, p->terminal);
+		}
+		dot = concat(dot, buffer);
 	}
 	dot = concat(dot, "\n}");
+	free(buffer);
 
 	//TESTEO
-	printf("%s",dot);
+	FILE *fp;
+	fp=fopen("out.dot", "w");
+	fprintf(fp, "%s", dot);
+	fclose(fp);
+	system("dot -Tpng out.dot > out.png");
+
 }

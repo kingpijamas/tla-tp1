@@ -17,6 +17,7 @@ int indexOf(char * s, char c);
 int indexOfLast(char * s);
 char * concat(char * s, char * t);
 char * strdup(const char * s);
+void cleanBuffer(char * buffer, int i);
 char getLast(char * s);
 char * stringify(char c);
 int ctoi(char c);

@@ -1,0 +1,16 @@
+digraph {
+rankdir = "LR";	 //De izquierda a derecha
+
+//Nodos
+node	[shape=circle] NodeA [label="A"];
+node	[shape=circle] NodeB [label="B"];
+node	[shape=doublecircle] Node1 [label="1"];
+
+
+//Transiciones
+NodeA -> NodeB [label="a"];
+NodeA -> Node1 [label="c"];
+NodeB -> NodeA [label="a"];
+NodeB -> Node1 [label="b"];
+
+}
