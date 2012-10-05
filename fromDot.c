@@ -252,3 +252,9 @@ char * GrammarToString(Grammar G){
 
 }
 
+void printGrammar(Automaton a){
+	FILE *fp;
+	fp=fopen("out.gr", "w");
+	fprintf(fp, "%s", GrammarToString(fromAFDtoGR(a)));
+	fclose(fp);
+}

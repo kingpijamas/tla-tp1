@@ -62,7 +62,7 @@ blank	[ \t\n]
 <TRANSITIONTO>Node{blank}*{digit} {addTo(t,getState(a,getLastDigit(yytext)));printf("Parsing transition to %s\n",yytext); BEGIN TRANSITIONBY;}
 <TRANSITIONBY>\[{blank}*label{blank}*={blank}*{letter} {addBy(t,getLast(yytext));addTransition(a,t);printf("Done parsing transition\n"); BEGIN TRANSITIONEND;}
 <TRANSITIONEND>\]{blank}*; {BEGIN EXPECTINGTRANSITIONS;}
-<EXPECTINGTRANSITIONS>\} {printf("Done parsing automaton\n"); printAutomaton(a); printf("%s \n",GrammarToString(fromAFDtoGR(a)));}
+<EXPECTINGTRANSITIONS>\} {printf("Done parsing automaton\n"); printAutomaton(a); printGrammar(a);}
 
 <INITIAL>{letter}([^ \n\t])* {g=newGrammar();g->name=strdup(yytext);printf("\nyytext: %s gramName:%s\n",yytext,g->name); BEGIN START;}
 <START>={blank}*\({blank}*\{ {printf("START\n"); BEGIN NONTERMINALS;}

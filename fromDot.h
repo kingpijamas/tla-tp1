@@ -10,5 +10,6 @@
 Grammar fromAFDtoGR(Automaton M);
 void printAutomaton(Automaton M);
 char * GrammarToString(Grammar G);
+void printGrammar(Automaton a);
 
 #endif
