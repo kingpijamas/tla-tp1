@@ -10,7 +10,7 @@
 
 
 typedef enum {
-	TWO_INITIAL_STATES=1,REFERENCING_UNEXISTENT_STATE,DISCONNECTED_STATE
+	TWO_INITIAL_STATES=!NO_ERROR,REFERENCING_UNEXISTENT_STATE,DISCONNECTED_STATE,NO_INITIAL_STATE
 } AutomatonErrorCodes;
 
 typedef struct state {
@@ -46,7 +46,7 @@ State newState(void);
 AutomatonErrorCodes addState(Automaton a,State s);
 Transition newTransition(void);
 State getState(Automaton a,int number);
-void addTo(Transition t, State s);
+AutomatonErrorCodes addTo(Transition t, State s);
 void addBy(Transition t, char c);
 void addTransition(Automaton a,Transition t);
 

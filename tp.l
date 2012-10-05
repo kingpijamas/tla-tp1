@@ -61,7 +61,7 @@ blank	[ \t\n]
 <EXPECTINGNODES>\/\/{blank}*Transiciones{blank}+ {printf("Parsing transitions\n"); BEGIN EXPECTINGTRANSITIONS;}
 <EXPECTINGTRANSITIONS>Node{blank}*{digit}+{blank}*-\> {t=newTransition();t->from=getState(a,getLastDigit(yytext));processErrors(validateState(t->from));
 printf("Parsing transition from: %s, t->from=%d\n", yytext,getLastDigit(yytext));BEGIN TRANSITIONTO;}
-<TRANSITIONTO>Node{blank}*{digit} {addTo(t,getState(a,getLastDigit(yytext)));printf("Parsing transition to %s\n",yytext); BEGIN TRANSITIONBY;}
+<TRANSITIONTO>Node{blank}*{digit} {printf("Parsing transition to %s\n",yytext);processErrors(addTo(t,getState(a,getLastDigit(yytext)))); BEGIN TRANSITIONBY;}
 <TRANSITIONBY>\[{blank}*label{blank}*={blank}*{letter} {addBy(t,getLast(yytext));addTransition(a,t);printf("Done parsing transition\n"); BEGIN TRANSITIONEND;}
 <TRANSITIONEND>\]{blank}*; {BEGIN EXPECTINGTRANSITIONS;}
 <EXPECTINGTRANSITIONS>\} {printf("Done parsing automaton\n"); processAutomaton(a);}
@@ -137,6 +137,8 @@ void processErrors(int err){
 		case DISCONNECTED_STATE:
 			printf("Error! El automata no es conexo.\n");
 			break;
+		case NO_INITIAL_STATE:
+			printf("Error! El automata no tiene estado inicial.\n");
 		default:
 			;
 		}

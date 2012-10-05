@@ -29,6 +29,7 @@ AutomatonErrorCodes addState(Automaton a,State s){
 		}else{
 			a->hasInitial=true;
 			a->q0 = s;
+			s->visited = true;
 		}
 	}
 	if(s->terminal){
@@ -70,7 +71,10 @@ void addBy(Transition t, char c){
 	t->by=c;
 }
 
-void addTo(Transition t, State s){
+AutomatonErrorCodes addTo(Transition t, State s){
+	if(s==NULL){
+		return REFERENCING_UNEXISTENT_STATE;
+	}
 	s->visited=true;
 	addToList(s,t->to);
 }

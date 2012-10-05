@@ -1,6 +1,10 @@
 #include "fromDot.h"
 
 AutomatonErrorCodes validateAutomaton(Automaton a){
+	if(a->q0==NULL){
+		return NO_INITIAL_STATE;
+	}
+	//Validando si el automata es conexo
 	Element elem;
 	FOR_EACH(elem,a->stateList){
 		if(((State)elem->data)->visited==false){

@@ -3,7 +3,7 @@
 Grammar newGrammar(){
 	Grammar g=malloc(sizeof(grammar));
 	if(g==NULL){
-		printf("<LOG - Grammar.c>\n\tInsufficient memory.\n<end>\n");
+		newInsufficientMemoryException("Grammar");
 	}
 	g->dir=NONE;
 	g->nonTerminals = malloc(sizeof(char)*27);
