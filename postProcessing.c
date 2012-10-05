@@ -143,18 +143,15 @@ Grammar removeUnproductiveNodes(Grammar g){
 	int n = strlen(g->nonTerminals);
 	for(k=0,i=0;i<n;i++, k++){
 		if(!isProductive[i] && g->nonTerminals[k] != 0){
-			printf("To remove <%c>\n", g->nonTerminals[k]);
+			List aux = malloc(sizeof(llist));
 			FOR_EACH(e, g->productions){
 				p = (Production)e->data;
-				if(p->from == g->nonTerminals[k]){
-					if(e->next == NULL){
-						p = (Production)e->prev->data;
-					}else{
-						p = (Production)e->next->data;
-					}
-					removeElemFromList(e, g->productions);
+				if(p->from != g->nonTerminals[k] && p->nonTerminal != g->nonTerminals[k]){
+					addToList(p, aux);
 				}
 			}
+			free(g->productions);
+			g->productions = aux;
 			removeNonTerminal(g, g->nonTerminals[k]);
 			k--;
 		}
@@ -232,7 +229,6 @@ Grammar toNormalRight(Grammar g){
 	Production aux;
 	g = normalize(g);
 	if(g->dir == LEFT){
-		printf("Es gramatica regular de IZQUIERDA\n");
 		boolean isEmptyChain = false;
 		addNonTerminal(g2, stringify('0'));
 		FOR_EACH(e,g->productions){
@@ -285,18 +281,15 @@ Grammar toNormalRight(Grammar g){
 		g2->dir = RIGHT;
 		g2->name = g->name;
 	}else{
-		printf("ES GRAMATICA REGULAR DERECHA\n");
 		g2 = g;
 	}
 	//SI ES DE DERECHA O AMBIGUA, PONER UN ELSE ARRIBA
 
 	FOR_EACH(e, g2->productions){
 		p = (Production)e->data;
-		g2->terminals = "";
-		if(p->terminal != '\\' && p->terminal != 0 && containsChar(g2->terminals, p->terminal)){
-			printf("sdfasdf\n");
-			addTerminal(g, stringify(p->terminal));
+		if(p->terminal != '\\' && p->terminal != 0 && !containsChar(g2->terminals, p->terminal)){
+			addTerminal(g2, stringify(p->terminal));
 		}
 	}
-	return g;
+	return g2;
 }

@@ -97,10 +97,12 @@ void processErrors(ErrorCodes err){
 
 void processGrammar(Grammar g){
 	processErrors(validate(g));
+	printGrammar(g);
 	g = removeUnreachableProductions(g);
 	g = toNormalRight(g);
 	g = removeUnreachableProductions(g);
 	g = removeUnproductiveNodes(g);
+	g->name = "Nueva Gramatica";
 	printGrammar(g);
 	printAutomaton(g);
 }

@@ -6,6 +6,8 @@ Grammar newGrammar(){
 		printf("<LOG - tp.l>\n\tNull pointer.\n<end>\n");
 	}
 	g->dir=NONE;
+	g->nonTerminals = malloc(sizeof(char)*27);
+	g->terminals = malloc(sizeof(char)*27);
 	//esto puede ir en una funcion nueva "initProductions"
 	g->productions=malloc(sizeof(llist));
 	initList(g->productions);
@@ -14,10 +16,18 @@ Grammar newGrammar(){
 }
 
 void addNonTerminal(Grammar g, char * from){
+	if(containsChar(g->nonTerminals, *from)){
+		printf("Duplicate non terminal detected.\n Program terminated.\n");
+		exit(1);
+	}
 	g->nonTerminals=concat(g->nonTerminals,from);
 }
 
 void addTerminal(Grammar g, char * from){
+	if(containsChar(g->terminals, *from)){
+		printf("Duplicate terminal detected.\n Program terminated.\n");
+		exit(1);
+	}
 	g->terminals=concat(g->terminals,from);
 }
 
@@ -72,6 +82,16 @@ void printGrammar(Grammar g){
 		cleanBuffer(buffer, 50);
 		sprintf(buffer, "%c ", g->terminals[i]);
 		stringy = concat(stringy, buffer);
+	}
+	cleanBuffer(buffer, 50);
+	sprintf(buffer, "\nSimbolo inicial:\n%c\nLa gramatica es valida y es de ", g->dist );
+	stringy = concat(stringy, buffer);
+	if(g->dir == RIGHT){
+		stringy = concat(stringy, "DERECHA");
+	}else if(g->dir == LEFT){
+		stringy = concat(stringy, "IZQUIERDA");
+	}else{
+		stringy = concat(stringy, "DERECHA o IZQUIERDA (las producciones valen para cualquier sentido)");
 	}
 	printf("%s\n", stringy);
 }
