@@ -56,7 +56,6 @@ Grammar removeUnreachableProductions(Grammar g){
 	int k;
 	for(k=0,j=0;j<n;j++, k++){
 		if((t[i][j]).reachable==false && g->nonTerminals[k] != 0){
-			printf("SE BORRA POR INALCANZABLE <%c>\n", g->nonTerminals[k]);
 			//removeElemFromList(t[i][j].elem, g->productions);
 			List aux = malloc(sizeof(llist));
 			FOR_EACH(e, g->productions){
@@ -136,7 +135,6 @@ Grammar removeUnproductiveNodes(Grammar g){
 				if((p->nonTerminal == 0 && p->terminal == '\\') || (p->nonTerminal != 0 && isProductive[indexOf(g->nonTerminals, p->nonTerminal)])){
 					isProductive[indexOf(g->nonTerminals, p->from)] = true;
 					changes = true;
-					printf("%c es productivo\n", p->from);
 				}
 			}
 		}
@@ -145,7 +143,6 @@ Grammar removeUnproductiveNodes(Grammar g){
 	int n = strlen(g->nonTerminals);
 	for(k=0,i=0;i<n;i++, k++){
 		if(!isProductive[i] && g->nonTerminals[k] != 0){
-			printf("SE BORRA POR INPRODUCTIVIDAD <%c>\n", g->nonTerminals[k]);
 			List aux = malloc(sizeof(llist));
 			FOR_EACH(e, g->productions){
 				p = (Production)e->data;
@@ -210,6 +207,7 @@ Grammar normalize(Grammar g){
 		}
 	}while(modified);
 	if(addedTerminal){
+		addNonTerminal(g, stringify('1'));
 		p = newProduction(g);
 		p->from = '1';
 		p->terminal = '\\';
@@ -232,7 +230,7 @@ Grammar toNormalRight(Grammar g){
 	Production aux;
 	g = normalize(g);
 	if(g->dir == LEFT){
-		boolean isEmptyChain = false;
+		//boolean isEmptyChain = false;
 		addNonTerminal(g2, stringify('0'));
 		FOR_EACH(e,g->productions){
 			p=(Production)e->data;
@@ -241,7 +239,7 @@ Grammar toNormalRight(Grammar g){
 					aux = newProduction(g2);
 					aux->from = '0';
 					aux->terminal = '\\';
-					isEmptyChain = true;
+					//isEmptyChain = true;
 				}
 				FOR_EACH(e2,g->productions){
 					p2=(Production)e2->data;

@@ -4,6 +4,7 @@ List newList(){
 	List l=malloc(sizeof(llist));
 	if(l==NULL){
 		printf("<LOG - LinkedList.c>\n\tInsufficient memory.\n<end>\n");
+		exit(1);
 	}
 	initList(l);
 	return l;
@@ -20,6 +21,7 @@ Element addToList(void *item, List list){
  	//  assert(item!=NULL); assert(list!=NULL);
 	if(item == NULL || list == NULL){
 		printf("<LOG - LinkedList.c>\n\tNull pointer.\n<end>\n");
+		exit(1);
 	}
 
 	//Create generic element to hold item ptr
@@ -28,6 +30,7 @@ Element addToList(void *item, List list){
 
 	if(NewEl == NULL){
 		printf("<LOG - LinkedList.c>\n\tInsufficient memory.\n<end>\n");
+		exit(1);
 	}
 
     list->NumEl = list->NumEl + 1;

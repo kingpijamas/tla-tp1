@@ -90,12 +90,34 @@ blank	[ \t\n]
 <PRODT>{upper}{blank}*\}{blank}*\) {p->nonTerminal=yytext[0]; processGrammar(g);}
 <PRODT>({lower}|{lambda}){blank}*\}{blank}*\) {p->terminal=yytext[0]; processGrammar(g);}
 
-. {printf("%s Error! Not a valid Grammar\n", yytext); return 1;}
+. {printf("Error! Not well written grammar.\n", yytext); return 1;}
 
 %%
 
 void processErrors(int err){
-	printf("RESULTADO NUMERO: %d\n", err);
+	if(err == NO_ERROR){
+		return;
+	}
+	switch( err ) {
+    case INVALID_DIST:
+        printf("Error! El distinguido no es parte de los no terminales.\n");
+        break;
+    case INVALID_FROM:
+        printf("Error! Al menos uno de los no terminales que producen no esta declarado.\n");
+        break;
+    case INVALID_NONTERMINAL:
+        printf("Error! Al menos uno de los no terminales producidos no esta declarado.\n");
+        break;
+    case INVALID_TERMINAL:
+        printf("Error! Al menos uno de los terminales en la produccion no esta en el alfabeto.\n");
+        break;
+    case DIST_NOT_USED:
+        printf("Error! El no terminal distinguido no tiene produccion.\n");
+        break;
+    default :
+        ;
+	}
+	exit(1);
 }
 
 void processGrammar(Grammar g){

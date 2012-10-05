@@ -82,6 +82,7 @@ void cleanBuffer(char * buffer, int i){
 char getLast(char * s){
 	if(s==NULL){
 		printf("<LOG - utils.c>\n\tNull pointer.\n<end>\n");
+		exit(1);
 	}
 	return s[strlen(s)-1];
 }
@@ -89,6 +90,7 @@ char getLast(char * s){
 int getLastDigit(char * s){
 	if(s==NULL){
 		printf("<LOG - utils.c>\n\tNull pointer.\n<end>\n");
+		exit(1);
 	}
 	int i=0;
 	int last=-1;
@@ -100,6 +102,7 @@ int getLastDigit(char * s){
 	}
 	if(last==-1){
 		printf("<LOG - utils.c>\n\tString %s does not contain digits.\n<end>\n",s);
+		exit(1);
 	}
 	return last;
 }
@@ -107,6 +110,7 @@ int getLastDigit(char * s){
 int ctoi(char c){
 	if(!isdigit(c)){
 		printf("<LOG - utils.c>\n\t%c is not a digit.\n<end>\n",c);
+		exit(1);
 	}
 	return c%'0';
 }

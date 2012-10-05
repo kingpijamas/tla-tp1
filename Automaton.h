@@ -12,7 +12,7 @@
 
 
 typedef enum {
-	TWO_INITIAL_STATES=!NO_ERROR
+	TWO_INITIAL_STATES=1
 } AutomatonErrorCodes;
 
 typedef struct state {

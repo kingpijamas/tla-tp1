@@ -14,7 +14,7 @@ typedef relation * Relation;
 typedef Relation * RelationMatrix;
 
 typedef enum {
-	INVALID_DIST=!NO_ERROR,INVALID_FROM,INVALID_NONTERMINAL,INVALID_TERMINAL,DIST_NOT_USED
+	INVALID_DIST=1,INVALID_FROM,INVALID_NONTERMINAL,INVALID_TERMINAL,DIST_NOT_USED
 } GrammarErrorCodes;
 
 RelationMatrix generateRelationMatrix(Grammar g, int n);//n is the size of production

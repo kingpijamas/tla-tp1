@@ -99,6 +99,14 @@ void printGrammar(Grammar g){
 	Production p;
 	FOR_EACH(e, g->productions){
 		p = (Production)e->data;
-		printf("%c->%c%c\n", p->from, p->terminal, p->nonTerminal);
+		char first, second;
+		if(g->dir == LEFT){
+			first = p->nonTerminal;
+			second = p->terminal;
+		}else{
+			first = p->terminal;
+			second = p->nonTerminal;
+		}
+		printf("%c->%c%c\n", p->from, first, second);
 	}
 }
