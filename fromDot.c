@@ -83,7 +83,7 @@ void printAutomaton(Automaton M){
 
 	int i;
 	Element elem,elem2,elem3;
-	Transition tran;
+	Transition tran,tran2;
 	State s;
 	printf("\n\n ALFABETO: Los simbolos terminales son:\n");
 
@@ -104,14 +104,21 @@ void printAutomaton(Automaton M){
 	FOR_EACH(elem, M->finals){
 		printf("%c  ",((State)elem->data)->K);
 	}
+	printf("\n");
 	
+	FOR_EACH(elem, M->delta){
+		tran2 = (Transition)elem->data;
+		FOR_EACH(elem2,tran2->to){
+			printf("%c -> %c %c\n", tran2->from->K, tran2->by,((State)elem2->data)->K);	
+		}
+	}
+
+
 	printf("\n\n Tabla de transiciones\n\n");
 	printf("  DELTA  ||");
-
 	for(i=0; (M->sigma)[i] != 0; i++){
 		printf("  %c  |",(M->sigma)[i]);		
 	}
-
 	FOR_EACH(elem, M->stateList){
 		printf("\n");
 		s = (State)elem->data;
@@ -125,11 +132,11 @@ void printAutomaton(Automaton M){
 					if((M->sigma)[i] == tran->by){
 						FOR_EACH(elem3, tran->to){
 			
-							printf("  %c  |\n",((State)elem->data)->K);
+							printf("  %c  |",((State)elem->data)->K);
 						
 						}
 					}else{
-						printf("      |");
+						printf("     |");
 					}
 				}
 			}

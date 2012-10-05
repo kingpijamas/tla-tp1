@@ -47,7 +47,7 @@ blank	[ \t\n]
 
 \/\/.* ;
 
-<EXPECTINGNODESSTART>\/\/{blank}+Nodos{blank}+ {printf("Parsing Nodes\n");BEGIN EXPECTINGNODES;}
+<EXPECTINGNODESSTART>\/\/{blank}*Nodos{blank}+ {printf("Parsing Nodes\n");BEGIN EXPECTINGNODES;}
 <EXPECTINGNODES>node{blank}*\[{blank}*shape{blank}*={blank}* {s=newState();printf("Parsing states\n");BEGIN DOTSTATETYPE;}
 <DOTSTATETYPE>circle {s->terminal=false;printf("Parsing non terminal state\n"); BEGIN DOTSTATENO;}
 <DOTSTATETYPE>doublecircle {s->terminal=true;printf("Parsing terminal state\n"); BEGIN DOTSTATENO;}

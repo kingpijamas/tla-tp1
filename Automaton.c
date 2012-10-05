@@ -70,7 +70,7 @@ void addTo(Transition t, State s){
 void addTransition(Automaton a,Transition t){
 	
 	int i,contains;
-	char * aux;
+	
 	
 	contains = 0;
 	for(i = 0; (a->sigma)[i] !=0 && !contains; i++){
