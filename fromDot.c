@@ -100,7 +100,7 @@ void printAutomaton(Automaton M){
 	}
 	printf("\n");
 
-	printf("ESTADO INICIAL: %c\n", M->q0.K);
+	printf("ESTADO INICIAL: %c\n", M->q0->K);
 
 	printf("ESTADOS FINALES:\n");
 
@@ -139,4 +139,102 @@ void printAutomaton(Automaton M){
 	}
 
 	return;
+}
+
+char * GrammartoString(Grammar G){
+
+	char * string = NULL;
+	char * aux = malloc(3);
+	int i = 0;
+	Element elem;
+	Production prod;
+
+	//G = ({
+	string = concat(string, G->name);
+	string = concat(string, " = ({");
+
+	//G = ({A,B,C}
+	for(i = 0; (G->nonTerminals)[i] != 0; i++){
+
+		aux[0] = (G->nonTerminals)[i];
+		if((G->nonTerminals)[i+1] == 0){
+			aux[1] = '}';
+		}else{
+			aux[1] = ',';
+		}
+		aux[2] = 0;
+		string = concat(string, aux);
+	}
+
+	//G = ({A,B,C},{
+	string = concat(string,",{");
+	
+	//G = ({A,B,C},{a,b,c}
+	for(i = 0; (G->terminals)[i] != 0; i++){
+
+		aux[0] = (G->terminals)[i];
+		if((G->terminals)[i+1] == 0){
+			aux[1] = '}';
+		}else{
+			aux[1] = ',';
+		}
+		aux[2] = 0;
+		string = concat(string, aux);
+	}
+	//G = ({A,B,C},{a,b,c},
+	string = concat(string, ",");
+
+	free(aux);
+	aux = malloc(4);
+	aux[0] = G->dist;
+	aux[1] = ',';
+	aux[2] = '{';
+	aux[3] = 0;
+
+	//G = ({A,B,C},{a,b,c},A,{
+	string = concat(string,aux);
+	free(aux);
+
+
+	for(i = 0,elem = G->productions->pFirst; elem != NULL; i++, elem = elem->next){
+		prod = (Production)elem->data;
+		if(prod->nonTerminal == 0 || prod->terminal == 0){
+			aux = malloc(6);
+			if(prod->nonTerminal != 0){
+				aux[3] = prod->nonTerminal;
+			}else{
+				aux[3] = prod->terminal;
+			}
+			//es la ultima
+			if(i + 1 == G->productions->NumEl){
+				aux[4] = '}';	
+			}else{
+				aux[4] = ',';
+			}	
+			aux[5] = 0;
+		}else{
+			aux = malloc(7);
+			aux[3] = prod->terminal;
+			aux[4] = prod->nonTerminal;
+			//es la ultima
+			if(i + 1 == G->productions->NumEl){
+				aux[5] = '}';	
+			}else{
+				aux[5] = ',';
+			}
+			aux[6] = 0;
+		}
+
+		aux[0] = prod->from;
+		aux[1] = '-';
+		aux[2] = '>';
+
+		string = concat(string,aux);
+
+		free(aux);
+	}
+	string = concat(string, ")");
+
+	return string;
+
 }
