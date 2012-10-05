@@ -202,7 +202,7 @@ Grammar fromAFDtoGR(Automaton M){
 	Element ptr,ptr2,ptr3;
 
 	//0_ Cargo q0 como dist
-	G->dist = M->q0.K;
+	G->dist = M->q0->K;
 
 	//1_ Cargo los terminales
 	addTerminal(G,M->sigma);
@@ -225,7 +225,7 @@ Grammar fromAFDtoGR(Automaton M){
 
 			FOR_EACH(ptr, M->delta){
 				tran = (Transition)ptr->data;
-				if(tran->from.K==q && tran->by==a){			
+				if(tran->from->K==q && tran->by==a){			
 					// Agrego todos los r
 					FOR_EACH(ptr2, tran->to){
 						r = ((State)ptr->data)->K; 

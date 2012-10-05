@@ -59,3 +59,35 @@ char getLast(char * s){
 	}
 	return s[strlen(s)-1];
 }
+
+int getLastDigit(char * s){
+	if(s==NULL){
+		printf("<LOG - utils.c>\n\tNull pointer.\n<end>\n");
+	}
+	int i=0;
+	int last=-1;
+	while(s[i]!='\0'){
+		if(isdigit(s[i])){
+			last=ctoi(s[i]);
+		}
+		i++;
+	}
+	if(last==-1){
+		printf("<LOG - utils.c>\n\tString %s does not contain digits.\n<end>\n",s);
+	}
+	return last;
+}
+
+char * stringify(char c){
+	char * s=malloc(sizeof(char)*2);
+	s[0]=c;
+	s[1]='\0';
+	return s;
+}
+
+int ctoi(char c){
+	if(!isdigit(c)){
+		printf("<LOG - utils.c>\n\t%c is not a digit.\n<end>\n",c);
+	}
+	return c%'0';
+}
