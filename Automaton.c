@@ -5,6 +5,7 @@ Automaton newAutomaton(){
 	if(a==NULL){
 		printf("<LOG - Automaton.c>\n\tInsufficient memory.\n<end>\n");
 	}
+	a->sigma="";
 	a->hasInitial=false;
 	a->stateList=newList();
 	a->finals=newList();
@@ -54,10 +55,34 @@ Transition newTransition(){
 	return t;
 }
 
+void addBy(Transition t, char c){
+	t->by=c;
+}
+
 void addTo(Transition t, State s){
 	addToList(s,t->to);
 }
 
 void addTransition(Automaton a,Transition t){
+	
+	int i,contains;
+	char * aux;
+	
+	contains = 0;
+	for(i = 0; (a->sigma)[i] !=0 && !contains; i++){
+		if(a->sigma[i] == t->by){
+			contains = 1;
+		}		
+	}
+	if(!contains){
+		aux = malloc(2);
+		aux[0] = t->by;
+		aux[1] = 0;
+		a->sigma = concat(a->sigma, aux);
+		free(aux);
+	}	
+	
 	addToList(t,t->to);
 }
+
+

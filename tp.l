@@ -60,7 +60,7 @@ blank	[ \t\n]
 <EXPECTINGNODES>\/\/{blank}*Transiciones{blank}+ {printf("Parsing transitions\n"); BEGIN EXPECTINGTRANSITIONS;}
 <EXPECTINGTRANSITIONS>Node{blank}*{digit}+{blank}*-\> {t=newTransition();t->from=getState(a,getLastDigit(yytext));printf("Parsing transition from: %s\n", yytext);BEGIN TRANSITIONTO;}
 <TRANSITIONTO>Node{blank}*{digit} {addTo(t,getState(a,getLastDigit(yytext)));printf("Parsing transition to %s\n",yytext); BEGIN TRANSITIONBY;}
-<TRANSITIONBY>\[{blank}*label{blank}*={blank}*({letter}|{digit}) {t->by=getLast(yytext);addTransition(a,t);printf("Done parsing transition\n"); BEGIN TRANSITIONEND;}
+<TRANSITIONBY>\[{blank}*label{blank}*={blank}*({letter}|{digit}) {addBy(t,getLast(yytext));addTransition(a,t);printf("Done parsing transition\n"); BEGIN TRANSITIONEND;}
 <TRANSITIONEND>\]{blank}*; {BEGIN EXPECTINGTRANSITIONS;}
 <EXPECTINGTRANSITIONS>\} {printf("Done parsing automaton\n"); printAutomaton(a);}
 
