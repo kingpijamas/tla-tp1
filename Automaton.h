@@ -18,10 +18,9 @@ typedef enum {
 typedef struct state {
 	char K;
 	int mark;
-
 	boolean terminal;
 	char number;
-	char label;
+	
 }state;
 
 typedef state * State;
