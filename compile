@@ -1,4 +1,4 @@
 #!/bin/bash
 
 rm -f sth.out
-flex tp.l && gcc -Wall -o sth.out lex.yy.c utils.c LinkedList.c postProcessing.c Grammar.c Automaton.c && ./sth.out
+flex tp.l && gcc -Wall -o sth.out lex.yy.c utils.c LinkedList.c postProcessing.c Grammar.c Automaton.c fromDot.c && ./sth.out
