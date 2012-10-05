@@ -37,8 +37,7 @@ ErrorCodes validate(Grammar g){
 	return OK;
 }
 
-void removeUnreachableProductions(Grammar g){
-	printf("HOLA\n");
+Grammar removeUnreachableProductions(Grammar g){
 	int i,j;
 	Production p;
 	Element e;
@@ -54,38 +53,30 @@ void removeUnreachableProductions(Grammar g){
 		}
 	}*/
 	i = indexOf(g->nonTerminals, g->dist);
-	for(j=0;j<n;j++){
-		if((t[i][j]).reachable==false){
-			printf("Tiene que remover <%c>\n", g->nonTerminals[j]);
+	int k;
+	for(k=0,j=0;j<n;j++, k++){
+		if((t[i][j]).reachable==false && g->nonTerminals[k] != 0){
 			//removeElemFromList(t[i][j].elem, g->productions);
 			FOR_EACH(e, g->productions){
 				p = (Production)e->data;
-				if(p->from == g->nonTerminals[j]){
+				Element aux;
+				while(p->from == g->nonTerminals[k]){
+					aux = e->next;
 					removeElemFromList(e, g->productions);
+					e = aux;
+					p = (Production)e->data;
 				}
 			}
+			removeNonTerminal(g, g->nonTerminals[k]);
+			k--;
 		}
 	}
-	FOR_EACH(e, g->productions){
-		p = (Production)e->data;
-		char from = p->from;
-		char first;
-		char second;
-		if(g->dir == RIGHT){
-			first = p->terminal;
-			second = p->nonTerminal;
-		}else{
-			first = p->nonTerminal;
-			second = p->terminal;
-		}
-		printf("%c->%c%c\n", from, first, second);
-	}
+	return g;
 }
 
 RelationMatrix generateRelationMatrix(Grammar g, int n){//n is the size of productions
 	int i;
 	RelationMatrix relM = malloc(n*sizeof(Relation));
-	Element e;
 	int row,col;
 	
 	if(relM==NULL){
@@ -98,7 +89,7 @@ RelationMatrix generateRelationMatrix(Grammar g, int n){//n is the size of produ
 		}
 	}
 	Production p;
-	
+	Element e;
 	FOR_EACH(e,g->productions){
 		p=(Production)e->data;
 		if(p->nonTerminal != 0){
@@ -125,5 +116,187 @@ void findReachableProductions(RelationMatrix t,int n){//uses Warshall's algorith
 			}
 		}
 	}
-	printf("\n");
+}
+
+Grammar removeUnproductiveNodes(Grammar g){
+	Element e;
+	Production p;
+	boolean changes = true;
+	boolean * isProductive = malloc(sizeof(boolean) * strlen(g->nonTerminals));
+	int i;
+	for(i = 0; i < strlen(g->nonTerminals); i++){
+		isProductive[i] = false;
+	}
+	while(changes){
+		changes = false;
+		FOR_EACH(e, g->productions){
+			p = (Production)e->data;
+			if(isProductive[indexOf(g->nonTerminals, p->from)] == false){
+				if((p->nonTerminal == 0 && p->terminal == '\\') || (p->nonTerminal != 0 && isProductive[indexOf(g->nonTerminals, p->nonTerminal)])){
+					isProductive[indexOf(g->nonTerminals, p->from)] = true;
+					changes = true;
+				}
+			}
+		}
+	}
+	int k;
+	int n = strlen(g->nonTerminals);
+	for(k=0,i=0;i<n;i++, k++){
+		if(!isProductive[i] && g->nonTerminals[k] != 0){
+			printf("To remove <%c>\n", g->nonTerminals[k]);
+			FOR_EACH(e, g->productions){
+				p = (Production)e->data;
+				if(p->from == g->nonTerminals[k]){
+					if(e->next == NULL){
+						p = (Production)e->prev->data;
+					}else{
+						p = (Production)e->next->data;
+					}
+					removeElemFromList(e, g->productions);
+				}
+			}
+			removeNonTerminal(g, g->nonTerminals[k]);
+			k--;
+		}
+	}
+	return g;
+}
+
+Grammar normalize(Grammar g){
+	Production p;
+	Element e;
+	Production p2;
+	Element e2;
+	Production aux;
+	boolean hasEnd = false;
+	boolean addedTerminal = false;
+	boolean modified = false;
+	Grammar auxi;
+	do{
+		auxi = newGrammar();
+		modified = false;
+		FOR_EACH(e,g->productions){
+			p=(Production)e->data;
+			if(p->from == p->nonTerminal && p->terminal == 0){
+				removeElemFromList(e, g->productions);
+				modified = true;
+			}else if(p->nonTerminal == 0 && p->terminal !='\\' ){
+				p->nonTerminal = '1';
+				hasEnd = true;
+				addedTerminal = true;
+				modified = true;
+			}else if(p->nonTerminal != 0 && (p->terminal == 0 || p->terminal == '\\')){
+				modified = true;
+				FOR_EACH(e2,g->productions){
+					p2=(Production)e2->data;
+					if(p2->from == p->nonTerminal){
+						aux = newProduction(auxi);
+						aux->from = p->from;
+						aux->nonTerminal = p2->nonTerminal;
+						aux->terminal = p2->terminal;
+					}
+				}
+				FOR_EACH(e2,auxi->productions){
+					p2=(Production)e2->data;
+					aux = newProduction(g);
+					aux->from = p2->from;
+					aux->nonTerminal = p2->nonTerminal;
+					aux->terminal = p2->terminal;
+				}
+				removeElemFromList(e, g->productions);
+			}else if(p->nonTerminal == 0 && p->terminal =='\\' ){
+				hasEnd=true;
+			}
+		}
+	}while(modified);
+	if(addedTerminal){
+		p = newProduction(g);
+		p->from = '1';
+		p->terminal = '\\';
+	}
+	if(!hasEnd){
+		printf("There's no production for the grammar\n");
+		exit(1);
+	}
+	g = removeUnreachableProductions(g);
+	return g;
+
+}
+
+Grammar toNormalRight(Grammar g){
+	Production p;
+	Element e;
+	Production p2;
+	Element e2;
+	Grammar g2 = newGrammar();
+	Production aux;
+	g = normalize(g);
+	if(g->dir == LEFT){
+		printf("Es gramatica regular de IZQUIERDA\n");
+		boolean isEmptyChain = false;
+		addNonTerminal(g2, stringify('0'));
+		FOR_EACH(e,g->productions){
+			p=(Production)e->data;
+			if(p->nonTerminal == 0 && p->terminal == '\\'){
+				if(p->from == g->dist){
+					aux = newProduction(g2);
+					aux->from = '0';
+					aux->terminal = '\\';
+					isEmptyChain = true;
+				}
+				FOR_EACH(e2,g->productions){
+					p2=(Production)e2->data;
+					if(p2->nonTerminal == p->from){
+						aux=newProduction(g2);
+						aux->from = '0';
+						aux->terminal = p2->terminal;
+						aux->nonTerminal = p2->from;
+					}
+				}
+			}
+		}
+		int i;
+		char c;
+
+		for(i = 0; i < strlen(g->nonTerminals); i++){
+			c = g->nonTerminals[i];
+			if(!containsChar(g2->nonTerminals, c)){
+				FOR_EACH(e2,g->productions){
+					p2=(Production)e2->data;
+					if(p2->nonTerminal == c){
+						aux=newProduction(g2);
+						aux->from = c;
+						aux->terminal = p2->terminal;
+						aux->nonTerminal = p2->from;
+					}
+				}
+				addNonTerminal(g2, stringify(c));
+			}
+		}
+		if(!isEmptyChain){
+			if(!containsChar(g2->nonTerminals, g->dist)){
+				addNonTerminal(g2, stringify(g->dist));
+			}
+			aux = newProduction(g2);
+			aux->from = g->dist;
+			aux->terminal = '\\';
+		}
+		g2->dist = '0';
+		g2->dir = RIGHT;
+		g2->name = g->name;
+	}else{
+		printf("ES GRAMATICA REGULAR DERECHA\n");
+		g2 = g;
+	}
+	//SI ES DE DERECHA O AMBIGUA, PONER UN ELSE ARRIBA
+
+	FOR_EACH(e, g2->productions){
+		p = (Production)e->data;
+		g2->terminals = "";
+		if(p->terminal != '\\' && p->terminal != 0 && containsChar(g2->terminals, p->terminal)){
+			printf("sdfasdf\n");
+			addTerminal(g, stringify(p->terminal));
+		}
+	}
+	return g;
 }

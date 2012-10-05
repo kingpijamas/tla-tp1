@@ -8,6 +8,5 @@
 #include "utils.h"
 
 void printAutomaton(Grammar g);
-void cleanBuffer(char * buffer);
 
 #endif

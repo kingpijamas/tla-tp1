@@ -11,11 +11,11 @@ void printAutomaton(Grammar g){
 		boolean flag = false;
 		FOR_EACH(e, g->productions){
 			p=(Production)e->data;
-			cleanBuffer(buffer);
-			if(p->from == g->nonTerminals[i] && p->nonTerminal == '\0' && p->terminal == '\\'){
+			if(p->from == g->nonTerminals[i] && p->nonTerminal == 0 && p->terminal == '\\'){
 				flag = true;
 			}
 		}
+		cleanBuffer(buffer, 50);
 		if(flag){
 			sprintf(buffer, "node	[shape=doublecircle] Node%c [label=\"%c\"];\n", g->nonTerminals[i], g->nonTerminals[i]);
 			dot = concat(dot, buffer);
@@ -28,13 +28,14 @@ void printAutomaton(Grammar g){
 	dot = concat(dot, "\n\n//Transiciones\n");
 	FOR_EACH(e, g->productions){
 		p=(Production)e->data;
-		cleanBuffer(buffer);
+		cleanBuffer(buffer, 50);
 		if(p->terminal != '\\'){
 			sprintf(buffer, "Node%c -> Node%c [label=\"%c\"];\n", p->from, p->nonTerminal, p->terminal);
 		}
 		dot = concat(dot, buffer);
 	}
 	dot = concat(dot, "\n}");
+	free(buffer);
 
 	//TESTEO
 	FILE *fp;
@@ -43,9 +44,4 @@ void printAutomaton(Grammar g){
 	fclose(fp);
 	system("dot -Tpng out.dot > out.png");
 
-}
-
-void cleanBuffer(char * buffer){
-	free(buffer);
-	buffer = malloc(50);
 }

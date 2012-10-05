@@ -34,5 +34,7 @@ void setDirection(Grammar g, Directions d);
 Production newProduction(Grammar g);
 void addProduction(Grammar g, Production p);
 Production getLastProduction(Grammar g);
+void removeNonTerminal(Grammar g, char c);
+void printGrammar(Grammar g);
 
 #endif

@@ -19,7 +19,10 @@ typedef enum {
 
 RelationMatrix generateRelationMatrix(Grammar g, int n);//n is the size of production
 void findReachableProductions(RelationMatrix t,int n);//uses Warshall's algorithm
-void removeUnreachableProductions(Grammar g);
+Grammar removeUnreachableProductions(Grammar g);
+Grammar removeUnproductiveNodes(Grammar g);
 ErrorCodes validate(Grammar g);
+Grammar toNormalRight(Grammar g);
+Grammar normalize(Grammar g);
 
 #endif

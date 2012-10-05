@@ -23,8 +23,8 @@ void addTerminal(Grammar g, char * from){
 
 void setDirection(Grammar g, Directions d){
 	if(g->dir!=d && g->dir!=NONE){
-		printf("Error");
-		return;
+		printf("Incompatible productions (Both left and right productions detected)\nProgram terminated\n");
+		exit(1);
 	};
 	g->dir=d;
 }
@@ -41,4 +41,37 @@ void addProduction(Grammar g, Production p){
 
 Production getLastProduction(Grammar g){
 	return ((Production)(g->productions->pLast)->data);
+}
+
+void removeNonTerminal(Grammar g, char c){
+	int i = indexOf(g->nonTerminals, c);
+	int j;
+	for(j = i; j < strlen(g->nonTerminals)-1; j++){
+		g->nonTerminals[j] = g->nonTerminals[j+1];
+	}
+	g->nonTerminals[strlen(g->nonTerminals)-1] = 0;
+}
+
+void printGrammar(Grammar g){
+	//TIRA SEGFAULT
+	char * stringy;
+	char * buffer = malloc(50);
+	stringy = strdup("====================================================\nGramatica ");
+	sprintf(buffer, "%s\nSimbolos no terminales: \n", g->name);
+	//stringy = concat(stringy, g->name);
+	//stringy = concat(stringy, "\nSimbolos no terminales: ");
+	int i;
+	stringy = concat(stringy, buffer);
+	for(i = 0; i < strlen(g->nonTerminals); i++){
+		cleanBuffer(buffer, 50);
+		sprintf(buffer, "%c ", g->nonTerminals[i]);
+		stringy = concat(stringy, buffer);
+	}
+	stringy = concat(stringy, "\nSimbolos terminales: \n");
+	for(i = 0; i < strlen(g->terminals); i++){
+		cleanBuffer(buffer, 50);
+		sprintf(buffer, "%c ", g->terminals[i]);
+		stringy = concat(stringy, buffer);
+	}
+	printf("%s\n", stringy);
 }
