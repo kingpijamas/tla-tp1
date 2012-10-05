@@ -6,8 +6,6 @@
 
 #define INITIALSTATE 0
 
-#include "LinkedList.h"
-
 #define MARK 1
 #define UNMARK 0
 #define EQUALS 1
@@ -22,14 +20,14 @@ typedef struct state {
 	int mark;
 
 	boolean terminal;
-	int number;
+	char number;
 	char label;
 }state;
 
 typedef state * State;
 
 typedef struct transition{
-	state from;	//NT U {iniciales}
+	State from;	//NT U {iniciales}
 	char by;	//T U {lambda}
 	List to;	//NT and Q_final
 }transition;
@@ -48,7 +46,11 @@ typedef struct automaton{
 typedef automaton * Automaton;
 
 Automaton newAutomaton(void);
-AutomatonErrorCodes addState(Automaton a,State s);
-State newState();
+void addState(Automaton a,State s);
+State newState(void);
+Transition newTransition(void);
+State getState(Automaton a,int number);
+void addTo(Transition t, State s);
+void addTransition(Automaton a,Transition t);
 
 #endif

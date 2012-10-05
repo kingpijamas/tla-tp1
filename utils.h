@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #define NO_ERROR 0
 
@@ -17,5 +18,7 @@ int indexOfLast(char * s);
 char * concat(char * s, char * t);
 char * strdup(const char * s);
 char getLast(char * s);
-
+char * stringify(char c);
+int ctoi(char c);
+int getLastDigit(char * s);
 #endif

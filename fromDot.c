@@ -16,7 +16,6 @@ Grammar fromAFDtoGR(Automaton M){
 	G->dist = M->q0->K;
 	G->productions = malloc(sizeof(llist));
 	G->dir = RIGHT;
-	
 
 	//1_ Cargo los terminales
 	addTerminal(G,M->sigma);
@@ -36,7 +35,7 @@ Grammar fromAFDtoGR(Automaton M){
 			q = (M->sigma)[j];
 			FOR_EACH(ptr, M->delta){
 				tran = (Transition)ptr->data;
-				if(tran->from.K==q && tran->by==a){			
+				if(tran->from->K==q && tran->by==a){			
 					// Agrego todos los r
 					FOR_EACH(ptr2, tran->to){
 						r = ((State)ptr->data)->K; 
@@ -122,7 +121,7 @@ void printAutomaton(Automaton M){
 
 		FOR_EACH(elem2, M->delta){
 			tran = (Transition)elem2->data;
-			if(tran->from.K == s->K){
+			if(tran->from->K == s->K){
 				for(i=0; (M->sigma)[i] != 0; i++){
 					if((M->sigma)[i] == tran->by){
 						FOR_EACH(elem3, tran->to){
