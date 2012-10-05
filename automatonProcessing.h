@@ -1,5 +1,5 @@
-#ifndef fromDot_h
-#define fromDot_h
+#ifndef automatonProcessing_h
+#define automatonProcessing_h
 #include <stdio.h>
 #include <ctype.h>
 #include "Automaton.h"

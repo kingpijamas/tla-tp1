@@ -1,4 +1,4 @@
-#include "fromDot.h"
+#include "automatonProcessing.h"
 
 AutomatonErrorCodes validateAutomaton(Automaton a){
 	if(a->q0==NULL){

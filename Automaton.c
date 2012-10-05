@@ -77,6 +77,7 @@ AutomatonErrorCodes addTo(Transition t, State s){
 	}
 	s->visited=true;
 	addToList(s,t->to);
+	return NO_ERROR;
 }
 
 void addTransition(Automaton a,Transition t){

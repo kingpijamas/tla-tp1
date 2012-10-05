@@ -4,10 +4,9 @@
 #include "utils.h"
 #include "LinkedList.h"
 #include "Grammar.h"
-#include "toDot.h"
-#include "postProcessing.h"
+#include "grammarProcessing.h"
 #include "Automaton.h"
-#include "fromDot.h"
+#include "automatonProcessing.h"
 
 typedef enum {
 	INGRAMMAR, INAUTOMATON, NOWHERE

@@ -1,9 +1,8 @@
 
-         # Basic Makefile -- provides explicit rules
-         # Creates "myprogram" from "scan.l" and "myprogram.c"
+         # Crea tp.c
          #
          LEX=flex
-         tp: tp.o 
+         tp: tp.o
 
          tp.o: tp.c LinkedList.c
      
