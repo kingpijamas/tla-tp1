@@ -2,19 +2,12 @@ digraph {
 rankdir = "LR";	 //De izquierda a derecha
 
 //Nodos
-node	[shape=circle] Node0 [label="0"];
-node	[shape=doublecircle] NodeA [label="A"];
-node	[shape=circle] NodeB [label="B"];
-node	[shape=circle] NodeD [label="D"];
+node	[shape=circle] NodeA [label="A"];
+node	[shape=doublecircle] NodeB [label="B"];
 
 
 //Transiciones
-Node0 -> NodeA [label="d"];
-Node0 -> NodeB [label="a"];
-NodeA -> NodeA [label="b"];
-NodeA -> NodeA [label="c"];
-NodeA -> NodeD [label="a"];
-NodeB -> NodeA [label="c"];
-NodeD -> NodeB [label="e"];
+NodeA -> NodeB [label="a"];
+NodeB -> NodeA [label="b"];
 
 }

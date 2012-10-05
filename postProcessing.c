@@ -57,16 +57,16 @@ Grammar removeUnreachableProductions(Grammar g){
 	for(k=0,j=0;j<n;j++, k++){
 		if((t[i][j]).reachable==false && g->nonTerminals[k] != 0){
 			//removeElemFromList(t[i][j].elem, g->productions);
+			List aux = malloc(sizeof(llist));
 			FOR_EACH(e, g->productions){
 				p = (Production)e->data;
-				Element aux;
-				while(p->from == g->nonTerminals[k]){
-					aux = e->next;
-					removeElemFromList(e, g->productions);
-					e = aux;
-					p = (Production)e->data;
+				//Element aux;
+				if(p->from != g->nonTerminals[k]){
+					addToList(p, aux);
 				}
 			}
+			free(g->productions);
+			g->productions = aux;
 			removeNonTerminal(g, g->nonTerminals[k]);
 			k--;
 		}

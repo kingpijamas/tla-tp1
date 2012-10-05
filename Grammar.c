@@ -94,4 +94,11 @@ void printGrammar(Grammar g){
 		stringy = concat(stringy, "DERECHA o IZQUIERDA (las producciones valen para cualquier sentido)");
 	}
 	printf("%s\n", stringy);
+	printf("Producciones\n");
+	Element e;
+	Production p;
+	FOR_EACH(e, g->productions){
+		p = (Production)e->data;
+		printf("%c->%c%c\n", p->from, p->terminal, p->nonTerminal);
+	}
 }

@@ -77,7 +77,7 @@ blank	[ \t\n]
 <PRODT>{upper}{blank}*, {p->nonTerminal=yytext[0]; BEGIN PRODF;}
 <PRODT>({lower}|{lambda}){blank}*, {p->terminal=yytext[0]; BEGIN PRODF;}
 
-<PRODT>{lower}{blank}*{upper}{blank}*\| {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; BEGIN PRODT;}
+<PRODT>{lower}{blank}*{upper}{blank}*\| {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)];aux=p;p=newProduction(g);p->from=aux->from; BEGIN PRODT;}
 <PRODT>{upper}{blank}*{lower}{blank}*\| {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];aux=p;p=newProduction(g);p->from=aux->from; BEGIN PRODT;}
 <PRODT>{upper}{blank}*\| {p->nonTerminal=yytext[0];aux=p;p=newProduction(g);p->from=aux->from; BEGIN PRODT;}
 <PRODT>({lower}|{lambda}){blank}*\| {p->terminal=yytext[0];aux=p;p=newProduction(g);p->from=aux->from; BEGIN PRODT;}
@@ -96,9 +96,8 @@ void processErrors(ErrorCodes err){
 }
 
 void processGrammar(Grammar g){
-	processErrors(validate(g));
 	printGrammar(g);
-	g = removeUnreachableProductions(g);
+	processErrors(validate(g));
 	g = toNormalRight(g);
 	g = removeUnreachableProductions(g);
 	g = removeUnproductiveNodes(g);
