@@ -1,6 +1,6 @@
 #include "toDot.h"
 
-void printAutomaton(Grammar g){
+void printAutomatonFromGrammar(Grammar g){
 	char * dot;
 	char * buffer = malloc(50);
 	dot = strdup("digraph {\nrankdir = \"LR\";\t //De izquierda a derecha\n\n//Nodos\n");

@@ -1,14 +1,12 @@
 #ifndef fromDot_h
 #define fromDot_h
-
+#include <stdio.h>
+#include <ctype.h>
 #include "Automaton.h"
 #include "LinkedList.h"
+#include "Grammar.h"
 
-List clausuraLambda(List Q, Automaton M);
-
-
-
-
-
+Grammar fromAFDtoGR(Automaton M);
+void printAutomaton(Automaton M);
 
 #endif

@@ -17,7 +17,7 @@ int indexOf(char * s, char c){
 			return i;
 		}
 	}
-	printf("No such element exception: %c in %s\n", c, s);
+	printf("<LOG - utils.c>\n\tNo such element: %c in %s\n<end>\n", c, s);
 	exit(1);
 }
 
@@ -38,7 +38,7 @@ char * concat(char * s, char * t){
 	}else{
 		char * aux = realloc(s,strlen(s)+strlen(t)+1);
 		if(aux == NULL){
-			printf("Not enough memory!");
+			printf("<LOG - utils.c>\n\tInsufficient memory.\n<end>\n");
 			exit(1);
 		}else if (aux != s){
 			free(s);
@@ -52,7 +52,7 @@ char * concat(char * s, char * t){
 char * strdup(const char * s){
 	char * d = malloc(strlen(s)+1);
 	if(d == NULL){
-		printf("Not enough memory!");
+		printf("<LOG - utils.c>\n\tInsufficient memory.\n<end>\n");
 		exit(1);
 	}
 	strcpy(d,s);
@@ -77,4 +77,36 @@ void cleanBuffer(char * buffer, int i){
 		printf("Not enough memory!");
 		exit(1);
 	}
+}
+
+char getLast(char * s){
+	if(s==NULL){
+		printf("<LOG - utils.c>\n\tNull pointer.\n<end>\n");
+	}
+	return s[strlen(s)-1];
+}
+
+int getLastDigit(char * s){
+	if(s==NULL){
+		printf("<LOG - utils.c>\n\tNull pointer.\n<end>\n");
+	}
+	int i=0;
+	int last=-1;
+	while(s[i]!='\0'){
+		if(isdigit(s[i])){
+			last=ctoi(s[i]);
+		}
+		i++;
+	}
+	if(last==-1){
+		printf("<LOG - utils.c>\n\tString %s does not contain digits.\n<end>\n",s);
+	}
+	return last;
+}
+
+int ctoi(char c){
+	if(!isdigit(c)){
+		printf("<LOG - utils.c>\n\t%c is not a digit.\n<end>\n",c);
+	}
+	return c%'0';
 }

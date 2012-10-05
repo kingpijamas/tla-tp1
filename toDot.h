@@ -7,6 +7,6 @@
 #include "LinkedList.h"
 #include "utils.h"
 
-void printAutomaton(Grammar g);
+void printAutomatonFromGrammar(Grammar g);
 
 #endif

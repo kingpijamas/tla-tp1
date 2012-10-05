@@ -1,13 +1,13 @@
 %{
 	#include "tp.h"
 
-//	Automaton a;
+	Automaton a;
+	State s;
+	Transition t;	
 
 	Grammar g;
 	Production p;
 	Production aux;
-//<DOTSTATESTART>. {printf("%s",yytext);}
-
 %}
 
 digit	[0-9]
@@ -39,30 +39,33 @@ blank	[ \t\n]
 %s EXPECTINGTRANSITIONS
 %s TRANSITIONTO
 %s TRANSITIONBY
+%s TRANSITIONEND
 
 %%
 {blank}+ ;
 
-<INITIAL>digraph{blank}*\{{blank}*rankdir{blank}*={blank}*"LR"{blank}*; {printf("Parsing DOT\n");BEGIN EXPECTINGNODESSTART;}
+<INITIAL>digraph{blank}*\{{blank}*rankdir{blank}*={blank}*"LR"{blank}*; {a=newAutomaton();printf("Parsing DOT\n"); BEGIN EXPECTINGNODESSTART;}
+
+\/\/.*[\n] ;
+
 <EXPECTINGNODESSTART>\/\/{blank}+Nodos{blank}+ {printf("Parsing Nodes\n");BEGIN EXPECTINGNODES;}
-<EXPECTINGNODES>node{blank}*\[{blank}*shape{blank}*={blank}* {printf("Parsing states\n");BEGIN DOTSTATETYPE;}
-<DOTSTATETYPE>circle {printf("Parsing non terminal state\n"); BEGIN DOTSTATENO;}
-<DOTSTATETYPE>doublecircle {printf("Parsing terminal state\n"); BEGIN DOTSTATENO;}
-<DOTSTATENO>{blank}*\]{blank}*Node{digit}+ {printf("Parsing number %s\n",yytext); BEGIN DOTSTATELABEL;}
+<EXPECTINGNODES>node{blank}*\[{blank}*shape{blank}*={blank}* {s=newState();printf("Parsing states\n");BEGIN DOTSTATETYPE;}
+<DOTSTATETYPE>circle {s->terminal=false;printf("Parsing non terminal state\n"); BEGIN DOTSTATENO;}
+<DOTSTATETYPE>doublecircle {s->terminal=true;printf("Parsing terminal state\n"); BEGIN DOTSTATENO;}
+<DOTSTATENO>{blank}*\]{blank}*Node{digit}+ {s->number=getLastDigit(yytext);printf("Parsing number:%s Loaded:%d\n",yytext,s->number); BEGIN DOTSTATELABEL;}
 <DOTSTATELABEL>{blank}*\[{blank}*label{blank}*={blank}* {BEGIN DOTSTATELABELNO;}
-<DOTSTATELABELNO>{digit}+ {printf("Parsing label %s\n",yytext); BEGIN DOTSTATEEND;}
-<DOTSTATEEND>{blank}*\]{blank}*; {printf("Done parsing state\n"); BEGIN EXPECTINGNODES;}
+
+<DOTSTATELABELNO>{digit}+ {s->label=getLast(yytext);printf("Parsing label %s Loaded:%c\n",yytext,s->label); BEGIN DOTSTATEEND;}
+<DOTSTATEEND>{blank}*\]{blank}*; {addState(a,s);printf("Done parsing state\n"); BEGIN EXPECTINGNODES;}
 
 <EXPECTINGNODES>\/\/{blank}*Transiciones{blank}+ {printf("Parsing transitions\n"); BEGIN EXPECTINGTRANSITIONS;}
-<EXPECTINGTRANSITIONS>Node{blank}*{digit}+{blank}*-\> {printf("Parsing transition from %s\n", yytext);BEGIN TRANSITIONTO;}
-<TRANSITIONTO>Node{blank}*{digit} {printf("Parsing transition to %s\n",yytext); BEGIN TRANSITIONBY;}
-<TRANSITIONBY>\[{blank}*label{blank}*={letter}{blank}*\]{blank}*; {printf("Done parsing transition\n"); BEGIN EXPECTINGTRANSITIONS;}
+<EXPECTINGTRANSITIONS>Node{blank}*{digit}+{blank}*-\> {t=newTransition();t->from=getState(a,getLastDigit(yytext));printf("Parsing transition from: %s\n", yytext);BEGIN TRANSITIONTO;}
+<TRANSITIONTO>Node{blank}*{digit} {addTo(t,getState(a,getLastDigit(yytext)));printf("Parsing transition to %s\n",yytext); BEGIN TRANSITIONBY;}
+<TRANSITIONBY>\[{blank}*label{blank}*={blank}*({letter}|{digit}) {t->by=getLast(yytext);addTransition(a,t);printf("Done parsing transition\n"); BEGIN TRANSITIONEND;}
+<TRANSITIONEND>\]{blank}*; {BEGIN EXPECTINGTRANSITIONS;}
+<EXPECTINGTRANSITIONS>\} {printf("Done parsing automaton\n"); printAutomaton(a);}
 
-<EXPECTINGTRANSITIONS>\} {printf("Done parsing automaton\n");}
-
-\/\/([^\n])*\n {printf("Comentario");}
-
-<INITIAL>{letter}([^ \n\t])* {g->name=strdup(yytext); BEGIN START;}
+<INITIAL>{letter}([^ \n\t])* {g = newGrammar(); g->name=strdup(yytext); BEGIN START;}
 <START>={blank}*\({blank}*\{ { BEGIN NONTERMINALS;}
 <NONTERMINALS>{upper}{blank}*, {yytext[1]=0; addNonTerminal(g,yytext);}
 <NONTERMINALS>{upper}{blank}*\}{blank}*,{blank}*\{ {yytext[1]=0; addNonTerminal(g,yytext);BEGIN TERMINALS;}
@@ -91,7 +94,7 @@ blank	[ \t\n]
 
 %%
 
-void processErrors(ErrorCodes err){
+void processErrors(int err){
 	printf("RESULTADO NUMERO: %d\n", err);
 }
 
@@ -103,11 +106,10 @@ void processGrammar(Grammar g){
 	g = removeUnproductiveNodes(g);
 	g->name = "Nueva Gramatica";
 	printGrammar(g);
-	printAutomaton(g);
+	printAutomatonFromGrammar(g);
 }
 
 int main(void){
-	g=newGrammar();
 	yylex();
 	return 0;
 }

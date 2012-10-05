@@ -1,6 +1,6 @@
 #include "postProcessing.h"
 
-ErrorCodes validate(Grammar g){
+GrammarErrorCodes validate(Grammar g){
 	//Validacion que los "from" esten contenidos en NoTerm y el dist esta en algun from	
 	char useDist = false;
 	Element e;
@@ -34,7 +34,7 @@ ErrorCodes validate(Grammar g){
 	if(useDist == false){
 		return DIST_NOT_USED;
 	}
-	return OK;
+	return NO_ERROR;
 }
 
 Grammar removeUnreachableProductions(Grammar g){
@@ -56,6 +56,7 @@ Grammar removeUnreachableProductions(Grammar g){
 	int k;
 	for(k=0,j=0;j<n;j++, k++){
 		if((t[i][j]).reachable==false && g->nonTerminals[k] != 0){
+			printf("SE BORRA POR INALCANZABLE <%c>\n", g->nonTerminals[k]);
 			//removeElemFromList(t[i][j].elem, g->productions);
 			List aux = malloc(sizeof(llist));
 			FOR_EACH(e, g->productions){
@@ -135,6 +136,7 @@ Grammar removeUnproductiveNodes(Grammar g){
 				if((p->nonTerminal == 0 && p->terminal == '\\') || (p->nonTerminal != 0 && isProductive[indexOf(g->nonTerminals, p->nonTerminal)])){
 					isProductive[indexOf(g->nonTerminals, p->from)] = true;
 					changes = true;
+					printf("%c es productivo\n", p->from);
 				}
 			}
 		}
@@ -143,6 +145,7 @@ Grammar removeUnproductiveNodes(Grammar g){
 	int n = strlen(g->nonTerminals);
 	for(k=0,i=0;i<n;i++, k++){
 		if(!isProductive[i] && g->nonTerminals[k] != 0){
+			printf("SE BORRA POR INPRODUCTIVIDAD <%c>\n", g->nonTerminals[k]);
 			List aux = malloc(sizeof(llist));
 			FOR_EACH(e, g->productions){
 				p = (Production)e->data;
@@ -269,14 +272,14 @@ Grammar toNormalRight(Grammar g){
 				addNonTerminal(g2, stringify(c));
 			}
 		}
-		if(!isEmptyChain){
+		//if(!isEmptyChain){
 			if(!containsChar(g2->nonTerminals, g->dist)){
 				addNonTerminal(g2, stringify(g->dist));
 			}
 			aux = newProduction(g2);
 			aux->from = g->dist;
 			aux->terminal = '\\';
-		}
+		//}
 		g2->dist = '0';
 		g2->dir = RIGHT;
 		g2->name = g->name;

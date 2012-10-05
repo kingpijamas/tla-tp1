@@ -3,13 +3,13 @@
 Grammar newGrammar(){
 	Grammar g=malloc(sizeof(grammar));
 	if(g==NULL){
-		printf("<LOG - tp.l>\n\tNull pointer.\n<end>\n");
+		printf("<LOG - Grammar.c>\n\tInsufficient memory.\n<end>\n");
 	}
 	g->dir=NONE;
 	g->nonTerminals = malloc(sizeof(char)*27);
 	g->terminals = malloc(sizeof(char)*27);
 	//esto puede ir en una funcion nueva "initProductions"
-	g->productions=malloc(sizeof(llist));
+	g->productions=newList();
 	initList(g->productions);
 	//hasta aca
 	return g;
