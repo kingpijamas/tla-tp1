@@ -28,7 +28,11 @@ void addState(Automaton a,State s){
 			printf("<LOG - Automaton.c>\n\tTWO_INITIAL_STATES.\n<end>\n");
 		}else{
 			a->hasInitial=true;
+			a->q0 = s;
 		}
+	}
+	if(s->terminal){
+		addToList(s,a->finals);
 	}
 	addToList(s,a->stateList);
 }
@@ -80,7 +84,8 @@ void addTransition(Automaton a,Transition t){
 		
 	}	
 	
-	addToList(t,t->to);
+	addToList(t,a->delta);
+
 }
 
 
