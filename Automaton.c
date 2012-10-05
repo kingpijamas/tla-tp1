@@ -3,7 +3,7 @@
 Automaton newAutomaton(){
 	Automaton a=malloc(sizeof(automaton));
 	if(a==NULL){
-		printf("<LOG - Automaton.c>\n\tInsufficient memory.\n<end>\n");
+		newInsufficientMemoryException("Automaton");
 	}
 	a->sigma="";
 	a->hasInitial=false;
@@ -16,16 +16,16 @@ Automaton newAutomaton(){
 State newState(){
 	State s=malloc(sizeof(state));
 	if(s==NULL){
-		printf("<LOG - Automaton.c>\n\tInsufficient memory.\n<end>\n");
+		newInsufficientMemoryException("Automaton");
 	}
 	s->mark=0;
 	return s;
 }
 
-void addState(Automaton a,State s){
+AutomatonErrorCodes addState(Automaton a,State s){
 	if(s->number==INITIALSTATE){
 		if(a->hasInitial){
-			printf("<LOG - Automaton.c>\n\tTWO_INITIAL_STATES.\n<end>\n");
+			return TWO_INITIAL_STATES;
 		}else{
 			a->hasInitial=true;
 			a->q0 = s;
@@ -35,25 +35,26 @@ void addState(Automaton a,State s){
 		addToList(s,a->finals);
 	}
 	addToList(s,a->stateList);
+	return NO_ERROR;
 }
 
 State getState(Automaton a,int number){
 	Element e;
-	State s;	
+	State s;
 	FOR_EACH(e,a->stateList){
 		s=(State)e->data;
 		if(s->number==number){
 			return s;
 		}
 	}
-	printf("<LOG - Automaton.c>\n\tUnexistent state %d.\n<end>\n",number);	
+	printf("<LOG - Automaton.c>\n\tUnexistent state %d.\n<end>\n",number);
 	return NULL;
 }
 
 Transition newTransition(){
 	Transition t=malloc(sizeof(transition));
 	if(t==NULL){
-		printf("<LOG - Automaton.c>\n\tInsufficient memory.\n<end>\n");
+		newInsufficientMemoryException("Automaton");
 	}
 	t->to=newList();
 	return t;
@@ -68,24 +69,18 @@ void addTo(Transition t, State s){
 }
 
 void addTransition(Automaton a,Transition t){
-	
 	int i,contains;
-	
-	
 	contains = 0;
 	for(i = 0; (a->sigma)[i] !=0 && !contains; i++){
 		if(a->sigma[i] == t->by){
 			contains = 1;
-		}		
+		}
 	}
 	if(!contains){
-
 		a->sigma = concat(strdup(a->sigma), stringify(t->by));
 		
 	}	
-	
 	addToList(t,a->delta);
-
 }
 
 

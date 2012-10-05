@@ -9,7 +9,13 @@
 #include "Automaton.h"
 #include "fromDot.h"
 
-void processErrors(int err);
+typedef enum {
+	INGRAMMAR, INAUTOMATON, NOWHERE
+} location;
+
+location whereAmI(void);
+void newSyntaxError(void);
 void processGrammar(Grammar g);
+void processAutomaton(Automaton a);
 
 #endif

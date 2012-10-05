@@ -3,7 +3,7 @@
 
 	Automaton a;
 	State s;
-	Transition t;	
+	Transition t;
 
 	Grammar g;
 	Production p;
@@ -46,9 +46,9 @@ blank	[ \t\n]
 
 <INITIAL>digraph{blank}*\{{blank}*rankdir{blank}*={blank}*"LR"{blank}*; {a=newAutomaton();printf("Parsing DOT\n"); BEGIN EXPECTINGNODESSTART;}
 
-\/\/.*[\n] ;
+\/\/.* {if(whereAmI()==INGRAMMAR){newSyntaxError();};}
 
-<EXPECTINGNODESSTART>\/\/{blank}*Nodos{blank}+ {printf("Parsing Nodes\n");BEGIN EXPECTINGNODES;}
+<EXPECTINGNODESSTART>\/\/{blank}*Nodos{blank}* {printf("Parsing Nodes\n");BEGIN EXPECTINGNODES;}
 <EXPECTINGNODES>node{blank}*\[{blank}*shape{blank}*={blank}* {s=newState();printf("Parsing states\n");BEGIN DOTSTATETYPE;}
 <DOTSTATETYPE>circle {s->terminal=false;printf("Parsing non terminal state\n"); BEGIN DOTSTATENO;}
 <DOTSTATETYPE>doublecircle {s->terminal=true;printf("Parsing terminal state\n"); BEGIN DOTSTATENO;}
@@ -56,22 +56,22 @@ blank	[ \t\n]
 <DOTSTATELABEL>{blank}*\[{blank}*label{blank}*={blank}* {BEGIN DOTSTATELABELNO;}
 
 <DOTSTATELABELNO>{letter} {s->K=getLast(yytext);printf("Parsing label %s Loaded:%c\n",yytext,s->K); BEGIN DOTSTATEEND;}
-<DOTSTATEEND>{blank}*\]{blank}*; {addState(a,s);printf("Done parsing state\n"); BEGIN EXPECTINGNODES;}
+<DOTSTATEEND>{blank}*\]{blank}*; {processErrors(addState(a,s));printf("Done parsing state\n"); BEGIN EXPECTINGNODES;}
 
 <EXPECTINGNODES>\/\/{blank}*Transiciones{blank}+ {printf("Parsing transitions\n"); BEGIN EXPECTINGTRANSITIONS;}
-<EXPECTINGTRANSITIONS>Node{blank}*{digit}+{blank}*-\> {t=newTransition();t->from=getState(a,getLastDigit(yytext));printf("Parsing transition from: %s\n", yytext);BEGIN TRANSITIONTO;}
+<EXPECTINGTRANSITIONS>Node{blank}*{digit}+{blank}*-\> {t=newTransition();t->from=getState(a,getLastDigit(yytext));printf("Parsing transition from: %s, t->from=%d\n", yytext,getLastDigit(yytext));BEGIN TRANSITIONTO;}
 <TRANSITIONTO>Node{blank}*{digit} {addTo(t,getState(a,getLastDigit(yytext)));printf("Parsing transition to %s\n",yytext); BEGIN TRANSITIONBY;}
 <TRANSITIONBY>\[{blank}*label{blank}*={blank}*{letter} {addBy(t,getLast(yytext));addTransition(a,t);printf("Done parsing transition\n"); BEGIN TRANSITIONEND;}
 <TRANSITIONEND>\]{blank}*; {BEGIN EXPECTINGTRANSITIONS;}
-<EXPECTINGTRANSITIONS>\} {printf("Done parsing automaton\n"); printAutomaton(a); printGrammar(a);}
+<EXPECTINGTRANSITIONS>\} {printf("Done parsing automaton\n"); processAutomaton(a);}
 
 <INITIAL>{letter}([^ \n\t])* {g = newGrammar(); g->name=strdup(yytext); BEGIN START;}
 <START>={blank}*\({blank}*\{ { BEGIN NONTERMINALS;}
-<NONTERMINALS>{upper}{blank}*, {yytext[1]=0; addNonTerminal(g,yytext);}
-<NONTERMINALS>{upper}{blank}*\}{blank}*,{blank}*\{ {yytext[1]=0; addNonTerminal(g,yytext);BEGIN TERMINALS;}
+<NONTERMINALS>{upper}{blank}*, {addNonTerminal(g,stringify(yytext[0]));}
+<NONTERMINALS>{upper}{blank}*\}{blank}*,{blank}*\{ { addNonTerminal(g,stringify(yytext[0]));BEGIN TERMINALS;}
 
-<TERMINALS>{lower}{blank}*, {yytext[1]=0; addTerminal(g,yytext);}
-<TERMINALS>{lower}{blank}*\}{blank}*, {yytext[1]=0; addTerminal(g,yytext); BEGIN DIST;}
+<TERMINALS>{lower}{blank}*, {addTerminal(g,yytext);}
+<TERMINALS>{lower}{blank}*\}{blank}*, {addTerminal(g,stringify(yytext[0])); BEGIN DIST;}
 <DIST>{upper}{blank}*,{blank}*\{ {g->dist = yytext[0];BEGIN PRODF;}
 <PRODF>{upper}{blank}*\-> {p=newProduction(g);p->from=yytext[0]; BEGIN PRODT;}
 
@@ -90,32 +90,59 @@ blank	[ \t\n]
 <PRODT>{upper}{blank}*\}{blank}*\) {p->nonTerminal=yytext[0]; processGrammar(g);}
 <PRODT>({lower}|{lambda}){blank}*\}{blank}*\) {p->terminal=yytext[0]; processGrammar(g);}
 
-. {printf("Error! Not well written grammar.\n", yytext); return 1;}
+. {printf("en . llega: %s\n",yytext);newSyntaxError();}
 
 %%
+
+location whereAmI(){
+	if(g!=NULL){
+		return INGRAMMAR;
+	}
+	if(a!=NULL){
+		return INAUTOMATON;
+	}
+	return NOWHERE;
+}
+
+void newSyntaxError(){
+	switch(whereAmI()){
+		case INGRAMMAR:
+			printf("Syntax error: Not well written grammar.\n");
+		break;
+		case INAUTOMATON:
+			printf("Syntax error: Not well written automaton.\n");
+		break;
+		case NOWHERE:
+			printf("Syntax error: Cannot recognize input type.\n");
+		break;
+		default:
+			;
+	}
+	 exit(1);
+}
 
 void processErrors(int err){
 	if(err == NO_ERROR){
 		return;
 	}
 	switch( err ) {
-    case INVALID_DIST:
-        printf("Error! El distinguido no es parte de los no terminales.\n");
-        break;
-    case INVALID_FROM:
-        printf("Error! Al menos uno de los no terminales que producen no esta declarado.\n");
-        break;
-    case INVALID_NONTERMINAL:
-        printf("Error! Al menos uno de los no terminales producidos no esta declarado.\n");
-        break;
-    case INVALID_TERMINAL:
-        printf("Error! Al menos uno de los terminales en la produccion no esta en el alfabeto.\n");
-        break;
-    case DIST_NOT_USED:
-        printf("Error! El no terminal distinguido no tiene produccion.\n");
-        break;
-    default :
-        ;
+	case INVALID_DIST:
+		printf("Error! El distinguido no es parte de los no terminales.\n");
+		break;
+	case INVALID_FROM:
+		printf("Error! Al menos uno de los no terminales que producen no esta declarado.\n");
+		break;
+	case INVALID_NONTERMINAL:
+		printf("Error! Al menos uno de los no terminales producidos no esta declarado.\n");
+		break;
+	case INVALID_TERMINAL:
+		printf("Error! Al menos uno de los terminales en la produccion no esta en el alfabeto.\n");
+		break;
+	case DIST_NOT_USED:
+		printf("Error! El no terminal distinguido no tiene produccion.\n");
+		break;
+	default :
+		;
 	}
 	exit(1);
 }
@@ -129,6 +156,16 @@ void processGrammar(Grammar g){
 	g->name = "Nueva Gramatica";
 	printGrammar(g);
 	printAutomatonFromGrammar(g);
+}
+
+void processAutomaton(Automaton a){
+	printAutomaton(a);
+	printf("imprime el automata bien\n");
+	FILE *fp;
+	fp=fopen("out.gr", "w");
+	printf("abre el file\n");
+	fprintf(fp, "%s", grammarToString(fromAFDtoGR(a)));
+	fclose(fp);
 }
 
 int main(void){

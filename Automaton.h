@@ -20,7 +20,6 @@ typedef struct state {
 	int mark;
 	boolean terminal;
 	char number;
-	
 }state;
 
 typedef state * State;
@@ -39,17 +38,16 @@ typedef struct automaton{
 	char * sigma; //alfabeto
 	List finals; //estados finales
 	State q0; //inicial	
-	List delta; //funcion de transicion; recordar hacer la list para deltas
+	List delta; //funcion de transicion;
 }automaton;
 
 typedef automaton * Automaton;
 
 Automaton newAutomaton(void);
-void addState(Automaton a,State s);
 State newState(void);
+AutomatonErrorCodes addState(Automaton a,State s);
 Transition newTransition(void);
 State getState(Automaton a,int number);
-//void addFrom(Transition t, ???);
 void addTo(Transition t, State s);
 void addBy(Transition t, char c);
 void addTransition(Automaton a,Transition t);

@@ -1,38 +1,30 @@
 #include "fromDot.h"
 
 void printAutomaton(Automaton M){
-
 	int i;
 	Element elem,elem2,elem3;
 	Transition tran,tran2;
 	State s;
-	printf("\n\n ALFABETO: Los simbolos terminales son:\n");
-
-	for(i=0; (M->sigma)[i]!= 0; i++){
-		printf("%c  ",(M->sigma)[i]);
-	}
-	printf("\n\n");
-
-	printf(" ESTADOS:\n");
+	printf("\nALFABETO: Los simbolos terminales son\n%s\n",M->sigma);
+	printf("ESTADOS:\n");
 	FOR_EACH(elem, M->stateList){
-		printf("%c  ",((State)elem->data)->K);
+		printf("%c ",((State)elem->data)->K);
 	}
-	printf("\n\n");
+	printf("\n");
 
-	printf(" ESTADO INICIAL: \n%c\n\n", M->q0->K);
+	printf("ESTADO INICIAL:\n%c\n", M->q0->K);
 	
-	printf(" ESTADOS FINALES:\n");
+	printf("ESTADOS FINALES:\n");
 	FOR_EACH(elem, M->finals){
-		printf("%c  ",((State)elem->data)->K);
+		printf("%c ",((State)elem->data)->K);
 	}
 	printf("\n");
 	
-
- 	printf("\n\n Transiciones:\n\n");	
+	printf("Transiciones:\n");
 	FOR_EACH(elem, M->delta){
 		tran2 = (Transition)elem->data;
 		FOR_EACH(elem2,tran2->to){
-			printf("%c -> %c %c\n", tran2->from->K, tran2->by,((State)elem2->data)->K);	
+			printf("%c->%c%c\n", tran2->from->K, tran2->by,((State)elem2->data)->K);
 		}
 	}
 
@@ -66,14 +58,12 @@ void printAutomaton(Automaton M){
 	// 		}
 	// 	}
 	// }
-
 	printf("\n");
-
 	return;
 }
 
 Grammar fromAFDtoGR(Automaton M){
-
+	printf("Entro bien\n");
 	Grammar G = malloc(sizeof(grammar));
 	
 	char * nonTerminals = malloc(1 + M->stateList->NumEl);
@@ -94,13 +84,13 @@ Grammar fromAFDtoGR(Automaton M){
 
 	//2_ Cargo los no terminales en nonTerminals con mayusculas
 	// y luego los cargo en la gramatica
-	for(i = 0, ptr = M->stateList->pFirst ; ptr!=NULL; i++, ptr=ptr->next){
+	for(i=0, ptr=M->stateList->pFirst; ptr!=NULL; i++, ptr=ptr->next){
 		nonTerminals[i] = toupper(((State)ptr->data)->K);
 	}
 	nonTerminals[i] = 0;
 	addNonTerminal(G, nonTerminals);
 
-	//3_ 
+	//3_
 	for(i = 0; (G->nonTerminals)[i]; i++){
 		q = (G->nonTerminals)[i];		
 		for(j = 0; (M->sigma)[j]; j++){			
@@ -110,7 +100,7 @@ Grammar fromAFDtoGR(Automaton M){
 				if(tran->from->K==q && tran->by==a){			
 					// Agrego todos los r
 					FOR_EACH(ptr2, tran->to){
-						r = ((State)ptr2->data)->K; 
+						r = ((State)ptr2->data)->K;
 						prod = malloc(sizeof(prod));
 						prod->from = toupper(q);
 						prod->nonTerminal = toupper(r);
@@ -147,13 +137,11 @@ Grammar fromAFDtoGR(Automaton M){
 			addToList(prod,G->productions);
 		}
 	}
-
 	return  G;
 }
 
 
-char * GrammarToString(Grammar G){
-
+char * grammarToString(Grammar G){
 	char * string = NULL;
 	char * aux = malloc(3);
 	int i = 0;
@@ -206,7 +194,6 @@ char * GrammarToString(Grammar G){
 	string = concat(string,aux);
 	free(aux);
 
-
 	for(i = 0,elem = G->productions->pFirst; elem != NULL; i++, elem = elem->next){
 		prod = (Production)elem->data;
 		if(prod->nonTerminal == 0 || prod->terminal == 0){
@@ -235,24 +222,12 @@ char * GrammarToString(Grammar G){
 			}
 			aux[6] = 0;
 		}
-
 		aux[0] = prod->from;
 		aux[1] = '-';
 		aux[2] = '>';
-
 		string = concat(string,aux);
-
 		free(aux);
 	}
 	string = concat(string, ")");
-
 	return string;
-
-}
-
-void printGrammar(Automaton a){
-	FILE *fp;
-	fp=fopen("out.gr", "w");
-	fprintf(fp, "%s", GrammarToString(fromAFDtoGR(a)));
-	fclose(fp);
 }
