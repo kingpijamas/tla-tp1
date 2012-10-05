@@ -75,11 +75,9 @@ void addTransition(Automaton a,Transition t){
 		}		
 	}
 	if(!contains){
-		aux = malloc(2);
-		aux[0] = t->by;
-		aux[1] = 0;
-		a->sigma = concat(a->sigma, aux);
-		free(aux);
+
+		a->sigma = concat(strdup(a->sigma), stringify(t->by));
+		
 	}	
 	
 	addToList(t,t->to);
