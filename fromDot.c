@@ -106,6 +106,8 @@ void printAutomaton(Automaton M){
 	}
 	printf("\n");
 	
+
+ 	printf("\n\n Transiciones:\n\n");	
 	FOR_EACH(elem, M->delta){
 		tran2 = (Transition)elem->data;
 		FOR_EACH(elem2,tran2->to){
@@ -114,34 +116,35 @@ void printAutomaton(Automaton M){
 	}
 
 
-	printf("\n\n Tabla de transiciones\n\n");
-	printf("  DELTA  ||");
-	for(i=0; (M->sigma)[i] != 0; i++){
-		printf("  %c  |",(M->sigma)[i]);		
-	}
-	FOR_EACH(elem, M->stateList){
-		printf("\n");
-		s = (State)elem->data;
-		printf("    %c    ||", s->K);
+	// printf("\n\n Tabla de transiciones\n\n");
+	// printf("  DELTA  ||");
+	// for(i=0; (M->sigma)[i] != 0; i++){
+	// 	printf("  %c  |",(M->sigma)[i]);		
+	// }
 
-		FOR_EACH(elem2, M->delta){
+	// FOR_EACH(elem, M->stateList){
+	// 	printf("\n");
+	// 	s = (State)elem->data;
+	// 	printf("    %c    ||", s->K);
 
-			tran = (Transition)elem2->data;
-			if(tran->from->K == s->K){
-				for(i=0; (M->sigma)[i] != 0; i++){
-					if((M->sigma)[i] == tran->by){
-						FOR_EACH(elem3, tran->to){
+	// 	FOR_EACH(elem2, M->delta){
+
+	// 		tran = (Transition)elem2->data;
+	// 		if(tran->from->K == s->K){
+	// 			for(i=0; (M->sigma)[i] != 0; i++){
+	// 				if((M->sigma)[i] == tran->by){
+	// 					FOR_EACH(elem3, tran->to){
 			
-							printf("  %c  |",((State)elem->data)->K);
+	// 						printf("  %c  |",((State)elem->data)->K);
 						
-						}
-					}else{
-						printf("     |");
-					}
-				}
-			}
-		}
-	}
+	// 					}
+	// 				}else{
+	// 					printf("     |");
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	printf("\n");
 
