@@ -44,7 +44,7 @@ blank	[ \t\n]
 %%
 {blank}+ ;
 
-<INITIAL>digraph{blank}*\{{blank}*rankdir{blank}*={blank}*"LR"{blank}*; {a=newAutomaton();BEGIN EXPECTINGNODESSTART;}
+<INITIAL>digraph{blank}*\{{blank}*rankdir{blank}*={blank}*\"LR\"{blank}*; {a=newAutomaton();BEGIN EXPECTINGNODESSTART;}
 
 \/\/.* {if(whereAmI()==INGRAMMAR){newSyntaxError();};}
 
@@ -55,13 +55,13 @@ blank	[ \t\n]
 <DOTSTATENO>{blank}*\]{blank}*Node{digit}+ {s->number=getLastDigit(yytext);BEGIN DOTSTATELABEL;}
 <DOTSTATELABEL>{blank}*\[{blank}*label{blank}*={blank}* {BEGIN DOTSTATELABELNO;}
 
-<DOTSTATELABELNO>{letter} {s->K=getLast(yytext);BEGIN DOTSTATEEND;}
+<DOTSTATELABELNO>\"({letter}|{digit})\" {s->K=yytext[indexOfLast(yytext)];BEGIN DOTSTATEEND;}
 <DOTSTATEEND>{blank}*\]{blank}*; {processErrors(addState(a,s));BEGIN EXPECTINGNODES;}
 
 <EXPECTINGNODES>\/\/{blank}*Transiciones{blank}+ {BEGIN EXPECTINGTRANSITIONS;}
 <EXPECTINGTRANSITIONS>Node{blank}*{digit}+{blank}*-\> {t=newTransition();t->from=getState(a,getLastDigit(yytext));processErrors(validateState(t->from));BEGIN TRANSITIONTO;}
 <TRANSITIONTO>Node{blank}*{digit} {processErrors(addTo(t,getState(a,getLastDigit(yytext)))); BEGIN TRANSITIONBY;}
-<TRANSITIONBY>\[{blank}*label{blank}*={blank}*{letter} {addBy(t,getLast(yytext));addTransition(a,t);BEGIN TRANSITIONEND;}
+<TRANSITIONBY>\[{blank}*label{blank}*={blank}*\"{letter}\" {addBy(t,yytext[indexOfLast(yytext)]);addTransition(a,t);BEGIN TRANSITIONEND;}
 <TRANSITIONEND>\]{blank}*; {BEGIN EXPECTINGTRANSITIONS;}
 <EXPECTINGTRANSITIONS>\} {processAutomaton(a);}
 

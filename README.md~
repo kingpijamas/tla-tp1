@@ -12,7 +12,3 @@ make clean
 	borra lo armado
 cat <archivo> | ./tp
 	corre el programa con la entrada del archivo
-echo <string> | ./tp
-	corre el programa con el string
-./tp
-	parsea la entrada que se le ingrese

@@ -29,7 +29,7 @@ int indexOf(char * s, char c){
 int indexOfLast(char * s){
 	int i=strlen(s)-1;	
 	while(i>0){
-		if(!(s[i]=='\t'||s[i]=='\n'||s[i]==' '||s[i]==','||s[i]=='|'||s[i]=='}' || s[i]==')' || s[i]==']')){
+		if(!(s[i]=='\t'||s[i]=='\n'||s[i]==' '||s[i]==','||s[i]=='|'||s[i]=='}' || s[i]==')' || s[i]==']' || s[i]== '\"')){
 			return i;
 		}		
 		i--;	

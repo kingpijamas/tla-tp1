@@ -281,16 +281,9 @@ Grammar toNormalRight(Grammar g){
 		g2->dist = '0';
 		g2->dir = RIGHT;
 		g2->name = g->name;
+		g2->productions = g->productions;
 	}else{
 		g2 = g;
-	}
-	//SI ES DE DERECHA O AMBIGUA, PONER UN ELSE ARRIBA
-
-	FOR_EACH(e, g2->productions){
-		p = (Production)e->data;
-		if(p->terminal != '\\' && p->terminal != 0 && !containsChar(g2->terminals, p->terminal)){
-			addTerminal(g2, stringify(p->terminal));
-		}
 	}
 	return g2;
 }
