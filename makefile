@@ -12,6 +12,6 @@ tp:
 
 clean:
 	-rm -f *.o core
-	-rm -f tp
+	-rm -f $(OUT_EXE)
 
 #rebuild: clean build
