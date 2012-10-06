@@ -1,24 +1,16 @@
 CC = gcc
 FLEX = flex
-FILES = ./tp.c ./utils.c ./LinkedList.c ./grammarProcessing.c ./Grammar.c ./Automaton.c ./automatonProcessing.c
-OUT_DIR=./
+FILES = lex.yy.c utils.c LinkedList.c grammarProcessing.c Grammar.c Automaton.c automatonProcessing.c
+LEXFILES = tp.l
 OUT_EXE=tp
 COPTS= -Wall -g
-LDOPTS= -lfl
-MATH = -lm
 
-FL_FILES = ./tp.l
-CC_FILES = ./tp.yy.c ./tp.c
-tp: $(FILES) $(FL_FILES)
-	$(CC) $(COPTS) -o $(OUT_EXE) $(FILES) $(CC_FILES) $(LDOPTS)
-	-rm -f tp.yy.c
+tp:
+	$(FLEX) $(LEXFILES)
+	$(CC) $(COPTS) -o $(OUT_EXE) $(FILES)
+	-rm -f *.yy.c
 
-tp.yy.c:	
-	$(FLEX) -o tp.yy.c $(FL_FILES)
-
-all: tp
-
-clean_all:
+clean:
 	-rm -f *.o core
 	-rm -f tp
 
