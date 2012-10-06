@@ -44,27 +44,26 @@ blank	[ \t\n]
 %%
 {blank}+ ;
 
-<INITIAL>digraph{blank}*\{{blank}*rankdir{blank}*={blank}*"LR"{blank}*; {a=newAutomaton();printf("Parsing DOT\n"); BEGIN EXPECTINGNODESSTART;}
+<INITIAL>digraph{blank}*\{{blank}*rankdir{blank}*={blank}*"LR"{blank}*; {a=newAutomaton();BEGIN EXPECTINGNODESSTART;}
 
 \/\/.* {if(whereAmI()==INGRAMMAR){newSyntaxError();};}
 
-<EXPECTINGNODESSTART>\/\/{blank}*Nodos{blank}* {printf("Parsing Nodes\n");BEGIN EXPECTINGNODES;}
-<EXPECTINGNODES>node{blank}*\[{blank}*shape{blank}*={blank}* {s=newState();printf("Parsing states\n");BEGIN DOTSTATETYPE;}
-<DOTSTATETYPE>circle {s->terminal=false;printf("Parsing non terminal state\n"); BEGIN DOTSTATENO;}
-<DOTSTATETYPE>doublecircle {s->terminal=true;printf("Parsing terminal state\n"); BEGIN DOTSTATENO;}
-<DOTSTATENO>{blank}*\]{blank}*Node{digit}+ {s->number=getLastDigit(yytext);printf("Parsing number:%s Loaded:%d\n",yytext,s->number); BEGIN DOTSTATELABEL;}
+<EXPECTINGNODESSTART>\/\/{blank}*Nodos{blank}* {BEGIN EXPECTINGNODES;}
+<EXPECTINGNODES>node{blank}*\[{blank}*shape{blank}*={blank}* {s=newState();BEGIN DOTSTATETYPE;}
+<DOTSTATETYPE>circle {s->terminal=false;BEGIN DOTSTATENO;}
+<DOTSTATETYPE>doublecircle {s->terminal=true;BEGIN DOTSTATENO;}
+<DOTSTATENO>{blank}*\]{blank}*Node{digit}+ {s->number=getLastDigit(yytext);BEGIN DOTSTATELABEL;}
 <DOTSTATELABEL>{blank}*\[{blank}*label{blank}*={blank}* {BEGIN DOTSTATELABELNO;}
 
-<DOTSTATELABELNO>{letter} {s->K=getLast(yytext);printf("Parsing label %s Loaded:%c\n",yytext,s->K); BEGIN DOTSTATEEND;}
-<DOTSTATEEND>{blank}*\]{blank}*; {processErrors(addState(a,s));printf("Done parsing state\n"); BEGIN EXPECTINGNODES;}
+<DOTSTATELABELNO>{letter} {s->K=getLast(yytext);BEGIN DOTSTATEEND;}
+<DOTSTATEEND>{blank}*\]{blank}*; {processErrors(addState(a,s));BEGIN EXPECTINGNODES;}
 
-<EXPECTINGNODES>\/\/{blank}*Transiciones{blank}+ {printf("Parsing transitions\n"); BEGIN EXPECTINGTRANSITIONS;}
-<EXPECTINGTRANSITIONS>Node{blank}*{digit}+{blank}*-\> {t=newTransition();t->from=getState(a,getLastDigit(yytext));processErrors(validateState(t->from));
-printf("Parsing transition from: %s, t->from=%d\n", yytext,getLastDigit(yytext));BEGIN TRANSITIONTO;}
-<TRANSITIONTO>Node{blank}*{digit} {printf("Parsing transition to %s\n",yytext);processErrors(addTo(t,getState(a,getLastDigit(yytext)))); BEGIN TRANSITIONBY;}
-<TRANSITIONBY>\[{blank}*label{blank}*={blank}*{letter} {addBy(t,getLast(yytext));addTransition(a,t);printf("Done parsing transition\n"); BEGIN TRANSITIONEND;}
+<EXPECTINGNODES>\/\/{blank}*Transiciones{blank}+ {BEGIN EXPECTINGTRANSITIONS;}
+<EXPECTINGTRANSITIONS>Node{blank}*{digit}+{blank}*-\> {t=newTransition();t->from=getState(a,getLastDigit(yytext));processErrors(validateState(t->from));BEGIN TRANSITIONTO;}
+<TRANSITIONTO>Node{blank}*{digit} {processErrors(addTo(t,getState(a,getLastDigit(yytext)))); BEGIN TRANSITIONBY;}
+<TRANSITIONBY>\[{blank}*label{blank}*={blank}*{letter} {addBy(t,getLast(yytext));addTransition(a,t);BEGIN TRANSITIONEND;}
 <TRANSITIONEND>\]{blank}*; {BEGIN EXPECTINGTRANSITIONS;}
-<EXPECTINGTRANSITIONS>\} {printf("Done parsing automaton\n"); processAutomaton(a);}
+<EXPECTINGTRANSITIONS>\} {processAutomaton(a);}
 
 <INITIAL>{letter}([^ \n\t])* {g = newGrammar(); g->name=strdup(yytext); BEGIN START;}
 <START>={blank}*\({blank}*\{ { BEGIN NONTERMINALS;}
@@ -91,7 +90,7 @@ printf("Parsing transition from: %s, t->from=%d\n", yytext,getLastDigit(yytext))
 <PRODT>{upper}{blank}*\}{blank}*\) {p->nonTerminal=yytext[0]; processGrammar(g);}
 <PRODT>({lower}|{lambda}){blank}*\}{blank}*\) {p->terminal=yytext[0]; processGrammar(g);}
 
-. {printf("en . llega: %s\n",yytext);newSyntaxError();}
+. {newSyntaxError();}
 
 %%
 

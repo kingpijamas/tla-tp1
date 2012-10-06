@@ -19,16 +19,18 @@ void printAutomaton(Automaton M){
 	Element elem,elem2,elem3;
 	Transition tran,tran2;
 	State s;
-	printf("\nALFABETO: Los simbolos terminales son\n%s\n",M->sigma);
-	printf("ESTADOS:\n");
+	printf("GRAMATICA RESULTANTE\n");
+	printf("====================\n");
+	printf("\nALFABETO: (simbolos terminales)\n\t%s\n",M->sigma);
+	printf("ESTADOS:\n\t");
 	FOR_EACH(elem, M->stateList){
 		printf("%c ",((State)elem->data)->K);
 	}
 	printf("\n");
 
-	printf("ESTADO INICIAL:\n%c\n", M->q0->K);
-	
-	printf("ESTADOS FINALES:\n");
+	printf("ESTADO INICIAL:\n\t%c\n", M->q0->K);
+
+	printf("ESTADOS FINALES:\n\t");
 	boolean entered=false;
 	FOR_EACH(elem, M->finals){
 		printf("%c ",((State)elem->data)->K);
@@ -39,7 +41,7 @@ void printAutomaton(Automaton M){
 	}
 	printf("\n");
 	
-	printf("Transiciones:\n");
+	printf("Transiciones:\n\t");
 	FOR_EACH(elem, M->delta){
 		tran2 = (Transition)elem->data;
 		FOR_EACH(elem2,tran2->to){
